@@ -1,0 +1,1 @@
+import{_ as e,o,c}from"./index-IaXPRz_7.js";const r={},s={class:"shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-2"};function t(n,a){return o(),c("div",s," 雪碧图 ")}const _=e(r,[["render",t]]);export{_ as default};
