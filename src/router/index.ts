@@ -8,9 +8,9 @@ export const toolsRouter: RouteRecordRaw[] = [
     component: () => import('@/pages/sprite.vue'),
   },
   {
-    path: '/base64',
-    name: 'base64',
-    component: () => import('@/pages/base64.vue'),
+    path: '/base64-to-Img',
+    name: 'base64-to-Img',
+    component: () => import('@/pages/base64Img.vue'),
   },
 ]
 
