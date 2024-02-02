@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import {  } from 'vue-router';
+import Header from './components/header.vue';
+import Main from './components/main.vue';
 </script>
 
 <template>
-  <div class=" bg-slate-800 w-20 h-20 flex items-center justify-center">123</div>
+  <Header />
+  <Main>
+    <template v-slot:default>
+      <RouterView />
+    </template>
+  </Main>
 </template>
 
 <style scoped>
