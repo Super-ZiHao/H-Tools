@@ -23,7 +23,7 @@ function downloadBase64Imgs(base64: string[], options: Options = {}) {
     // 创建一个a标签用于下载
     let a = document.createElement('a');
     a.href = base64Image;
-    a.download = `${name}${downloadedImages}.${mimeType ?? getBase64ImageType(base64Image)}`; // 设置下载的文件名
+    a.download = `${name}_${downloadedImages}.${mimeType ?? getBase64ImageType(base64Image)}`; // 设置下载的文件名
     document.body.appendChild(a); // 添加a标签到body中
     a.click(); // 模拟点击下载
     document.body.removeChild(a); // 移除a标签
