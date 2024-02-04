@@ -2,11 +2,11 @@
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 
 export const toolsRouter: RouteRecordRaw[] = [
-  {
-    path: '/sprite',
-    name: '雪碧图',
-    component: () => import('@/pages/sprite.vue'),
-  },
+  // {
+  //   path: '/sprite',
+  //   name: '雪碧图',
+  //   component: () => import('@/pages/sprite.vue'),
+  // },
   {
     path: '/base64-to-Img',
     name: 'base64-to-Img',
