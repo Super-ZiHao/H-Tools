@@ -7,7 +7,8 @@ createApp(App)
 .mount('#app')
 
 
+/** cdn 引入库的类型 */
 declare global {
   const _: typeof import('lodash'); // 声明 _ 变量为 lodash 的类型
-  const JSONEditor: typeof import('@/types/JSONEditor').JSONEditor; // 声明 JSONEditor
+  const JSONEditor: typeof import('jsoneditor').default; // 声明 JSONEditor
 }

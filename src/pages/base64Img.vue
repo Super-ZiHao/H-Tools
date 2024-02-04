@@ -9,8 +9,7 @@ const inputVlueString = ref<string>('');
 const nameValue = ref<string>('image_');
 const isJsonError = ref<boolean>(false);
 const jsonRef = ref<HTMLDivElement>();
-
-const editor = ref<any>();
+const editor = ref();
 onMounted(() => {
   if (!jsonRef.value) return;
   editor.value  = new JSONEditor(jsonRef.value, {
