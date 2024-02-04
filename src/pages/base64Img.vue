@@ -1,10 +1,8 @@
 <script lang='ts' setup>
-import { get } from 'lodash-es';
 import { ref, computed, onMounted } from 'vue';
 import isValidVariableName from '@/utils/isValidVariableName.ts'
 import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64Image from '@/utils/isBase64Image.ts'
-import JSONEditor from 'jsoneditor';
 
 const jsonValue = ref<any>([]);
 const inputVlueString = ref<string>('');
@@ -12,7 +10,7 @@ const nameValue = ref<string>('image_');
 const isJsonError = ref<boolean>(false);
 const jsonRef = ref<HTMLDivElement>();
 
-const editor = ref<JSONEditor>();
+const editor = ref<any>();
 onMounted(() => {
   if (!jsonRef.value) return;
   editor.value  = new JSONEditor(jsonRef.value, {
@@ -52,7 +50,7 @@ const handlerDownload = () => {
       return;
     }
     default: {
-      downloadImgs(jsonValue.value.map((i: any) => get(i, inputValue)), { name: nameValue.value })
+      downloadImgs(jsonValue.value.map((i: any) => _.get(i, inputValue)), { name: nameValue.value })
       return;
     }
   }
@@ -61,7 +59,7 @@ const handlerDownload = () => {
 // 当前可下载图片
 const availableImgLength = computed(() => {
   if (isJsonError.value || isInputError.value) return 0;
-  const nestedValuesArr = jsonValue.value.map((i: any) => get(i, inputVlueString.value))
+  const nestedValuesArr = jsonValue.value.map((i: any) => _.get(i, inputVlueString.value))
   return (inputVlueString.value === '' ? jsonValue.value : nestedValuesArr).filter((i: string) => isBase64Image(i)).length;
 })
 

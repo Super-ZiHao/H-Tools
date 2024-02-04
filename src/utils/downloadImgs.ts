@@ -1,5 +1,4 @@
 import getBase64ImageType from './getBase64ImageType';
-import { chunk } from 'lodash-es';
 
 type Options = {
   /** 图片前缀 */
@@ -29,7 +28,7 @@ function downloadBase64Imgs(base64: string[], options: Options = {}) {
     document.body.removeChild(a); // 移除a标签
     downloadedImages++; // 增加下载图片的数量
   }
-  const newBase64 = chunk(base64, chunkSize);
+  const newBase64 = _.chunk(base64, chunkSize);
   const timer = setInterval(() => {
     newBase64[currentChunkIndex].forEach(downloadImage);
     currentChunkIndex += 1;
