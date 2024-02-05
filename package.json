@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.11",
+    "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@types/js-beautify": "^1.14.3",
+    "@types/jsoneditor": "^9.9.5",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.16",
     "@vitejs/plugin-vue": "^4.5.2",

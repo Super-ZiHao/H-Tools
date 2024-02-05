@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {  } from 'vue-router';
 import Header from './components/header.vue';
 import Main from './components/main.vue';
 </script>
