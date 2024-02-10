@@ -10,10 +10,8 @@ const imgInfoArr = reactive<ImgInfoType[]>([]);
 <template>
   <div class=" text-2xl mb-6">雪碧图生成器</div>
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4 overflow-hidden">
-    <div class="overflow-hidden w-80 h-full border rounded-md border-cyan-400">
-      <draggable  v-model="imgInfoArr"></draggable>
-    </div>
-    <div class="w-full h-full border rounded-md border-cyan-400 overflow-auto">
+    <draggable  v-model="imgInfoArr"></draggable>
+    <div class="w-full h-full border-[3px] rounded-md border-cyan-400 overflow-auto">
       <TransitionGroup class="w-fit" tag="div" name="list">
         <img
           class="transition-all"
