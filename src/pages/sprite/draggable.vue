@@ -1,4 +1,5 @@
 <script lang='ts' setup>
+import { ElButton } from 'element-plus';
 import { ref } from 'vue';
 export type ImgInfoType = {
   /** 唯一 id */
@@ -87,7 +88,7 @@ const fileInputRef = ref<HTMLInputElement>();
 </script>
 
 <template>
-  <div class="container relative w-80 rounded-md h-full border-[3px] transition-all border-cyan-400 overflow-auto"
+  <div class="container flex-shrink-0 relative w-64 rounded-md h-full border-[2px] transition-all border-cyan-400 overflow-auto"
     @drop="handlerDrop"
     @dragleave="handlerDragleave"
     @dragover="handlerDragover"
@@ -103,7 +104,7 @@ const fileInputRef = ref<HTMLInputElement>();
       tag="div"
     >
       <div
-        class="draggable-item w-full h-14 p-2 rounded-md text-ellipsis select-none text-lg bg-slate-100 flex items-center gap-2 cursor-pointer hover:bg-slate-200 active:bg-slate-300 hover:scale-[1.02] transition-all"
+        class="draggable-item text-nowrap overflow-hidden w-full h-14 p-2 rounded-md text-ellipsis select-none text-lg bg-slate-100 flex items-center gap-2 cursor-pointer hover:bg-slate-200 active:bg-slate-300 hover:scale-[1.02] transition-all"
         @click="(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -116,12 +117,13 @@ const fileInputRef = ref<HTMLInputElement>();
         {{ info.name }}
       </div>
     </TransitionGroup>
-    <button
-      class="upload-btn flex items-center justify-center w-28 h-10 rounded-md text-white bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition-all" key="upload-btn"
+    <ElButton
+      class="upload-btn"
+      type="success" 
       @click="fileInputRef?.click()"
     >
       点击上传
-    </button>
+    </ElButton>
     <input
       class="hidden"
       type="file"
@@ -138,10 +140,10 @@ const fileInputRef = ref<HTMLInputElement>();
 
 .container {
   &.drop-file { // 拖拽上传
-    border: 3px dashed rgb(37, 99, 235);
+    border: 2px dashed #7ec050;
   }
   &.dragging { // 改变位置中
-    border: 3px solid rgb(37, 99, 235) !important;
+    border: 2px solid rgb(37, 99, 235) !important;
     .draggable-item {
       &:hover,
       &:active {

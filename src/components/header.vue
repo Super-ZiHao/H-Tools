@@ -3,7 +3,7 @@ import { toolsRouter } from '@/router'
 </script>
 
 <template>
-  <header class="flex items-center justify-between shadow-lg py-4 lg:px-12 px-4 h-16">
+  <header class="flex items-center justify-between min-w-[800px] shadow-lg py-4 lg:px-12 px-4 h-16">
     <div class="flex items-center">
       <img class="h-14" src="../../public/logo.png" style="margin: -12px; filter: invert(1);" />
       <div class="text-lg">Tools</div>
