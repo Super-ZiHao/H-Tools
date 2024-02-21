@@ -61,6 +61,7 @@ const handlerDragstart = (e: DragEvent) => {
     e.target && (e.target as HTMLElement).classList.add(DRAGGING_ITEM);
   }, 0);
   sourceNode.value = e.target as HTMLElement;
+  showMask.value = true;
 }
 const handlerDragenter = (e: DragEvent) => {
   e.preventDefault();
@@ -77,18 +78,28 @@ const handlerDragenter = (e: DragEvent) => {
 const handlerDragend = (e: DragEvent) =>  {
   containerRef.value?.classList.remove(DRAGGING);
   e.target && (e.target as HTMLElement).classList.remove(DRAGGING_ITEM);
+  showMask.value = false;
 }
+
+// 删除
+const showMask = ref(false);
+const currentDraggingItem = ref<ImgInfoType>();
+const handlerDelete = () => {
+  imgInfoArr.value?.splice(imgInfoArr.value.findIndex(i => i === currentDraggingItem.value), 1);
+}
+
 
 /** input change */
 const handlerInputChange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   fileInfoFormat([...(input.files ?? [])]);
+  input.value = '';
 }
 const fileInputRef = ref<HTMLInputElement>();
 </script>
 
 <template>
-  <div class="container flex-shrink-0 relative w-64 rounded-md h-full border-[2px] transition-all border-cyan-400 overflow-auto"
+  <div class="relative z-10 bg-white container flex-shrink-0 w-64 rounded-md h-full border-[2px] transition-all border-cyan-400 overflow-auto"
     @drop="handlerDrop"
     @dragleave="handlerDragleave"
     @dragover="handlerDragover"
@@ -104,17 +115,18 @@ const fileInputRef = ref<HTMLInputElement>();
       tag="div"
     >
       <div
-        class="draggable-item text-nowrap overflow-hidden w-full h-14 p-2 rounded-md text-ellipsis select-none text-lg bg-slate-100 flex items-center gap-2 cursor-pointer hover:bg-slate-200 active:bg-slate-300 hover:scale-[1.02] transition-all"
+        class="draggable-item text-nowrap  w-full h-14 p-2 rounded-md  select-none text-lg bg-slate-100 flex items-center gap-2 cursor-pointer hover:bg-slate-200 active:bg-slate-300 hover:scale-[1.02] transition-all"
         @click="(e) => {
           e.stopPropagation();
           e.preventDefault();
         }"
         draggable="true"
         v-for="info in imgInfoArr"
+        @dragstart="currentDraggingItem = info"
         :key="info.id"
       >
-        <img :src="info.url" class="aspect-square h-full rounded-md" draggable="false" alt="">
-        {{ info.name }}
+        <img :src="info.url" class="aspect-square h-full rounded-md pointer-events-none" draggable="false" alt="">
+        <div class="text-ellipsis overflow-hidden pointer-events-none" draggable="false" v-html="info.name"></div>
       </div>
     </TransitionGroup>
     <ElButton
@@ -134,6 +146,12 @@ const fileInputRef = ref<HTMLInputElement>();
       name="file"
     >
   </div>
+  <div
+    class="mask"
+    v-show="showMask"
+    @dragover="(e) => e.preventDefault()"
+    @drop="handlerDelete"
+  ></div>
 </template>
 
 <style lang='scss' scoped>
@@ -180,5 +198,12 @@ const fileInputRef = ref<HTMLInputElement>();
 .list-leave-to {
   opacity: 0;
   transform: translateY(20px);
+}
+
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background-color: rgba($color: #000000, $alpha: .18);
 }
 </style>
