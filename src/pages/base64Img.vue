@@ -3,6 +3,8 @@ import { ref, computed, onMounted } from 'vue';
 import isValidVariableName from '@/utils/isValidVariableName.ts'
 import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64Image from '@/utils/isBase64Image.ts'
+import _ from 'lodash';
+import JSONEditor from 'jsoneditor';
 
 const jsonValue = ref<any>([]);
 const inputVlueString = ref<string>('');

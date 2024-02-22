@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { ElButton, ElInput, ElOption, ElSelect } from 'element-plus';
+import html2canvas from 'html2canvas';
 import { ImgInfoType } from './draggable.vue';
 import { computed, ref } from 'vue';
 const { data } = defineProps<{

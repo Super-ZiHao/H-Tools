@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import getBase64ImageType from './getBase64ImageType';
 
 type Options = {
