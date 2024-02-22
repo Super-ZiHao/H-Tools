@@ -7,7 +7,7 @@ import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
 enum PackageType {
   ElementPlus = 'element-plus',
   JSONEditor = 'jsoneditor',
-  Html2Canvas = 'html2canvas',
+  html2canvas = 'html2canvas',
   VueRouter = 'vue-router',
   ElementPlusIconsVue = '@element-plus/icons-vue',
 }
@@ -53,8 +53,8 @@ export default defineConfig({
           path: 'dist/jsoneditor.min.js',
         },
         {
-          ...getCompleteUrl(PackageType.Html2Canvas),
-          path: 'dist/html2canvas.full.min.js',
+          ...getCompleteUrl(PackageType.html2canvas),
+          path: 'dist/html2canvas.min.js',
         },
       ]
     })

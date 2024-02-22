@@ -7,7 +7,11 @@ import Main from './components/main.vue';
   <Header />
   <Main>
     <template v-slot:default>
-      <RouterView />
+      <RouterView v-slot="{Component, route}">
+        <KeepAlive>
+          <component :is="Component" :key="route.path" />
+        </KeepAlive>
+      </RouterView>
     </template>
   </Main>
 </template>

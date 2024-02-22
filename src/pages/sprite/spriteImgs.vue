@@ -137,7 +137,7 @@ const modeClass = computed(() => {
         :style="`gap: ${gap}px; --max-size:${maxSize}px; --col: ${col}`"
       >
         <img
-          class="transition-all block"
+          class="transition-all block object-contain"
           v-for="info in data"
           :key="info.id"
           :src="info.url"
