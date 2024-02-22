@@ -9,7 +9,7 @@ enum PackageType {
   JSONEditor = 'jsoneditor',
   Html2Canvas = 'html2canvas',
   VueRouter = 'vue-router',
-  ElementPlusIcon = '@element-plus/icons-vue',
+  ElementPlusIconsVue = '@element-plus/icons-vue',
 }
 
 const getCompleteUrl = (name: string, css?: boolean) => {
@@ -44,7 +44,7 @@ export default defineConfig({
           path: 'dist/index.full.min.js',
         },
         {
-          ...getCompleteUrl(PackageType.ElementPlusIcon),
+          ...getCompleteUrl(PackageType.ElementPlusIconsVue),
           path: 'dist/index.iife.min.js',
         },
         {
