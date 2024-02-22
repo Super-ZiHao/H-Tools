@@ -4,6 +4,7 @@ import { Picture } from '@element-plus/icons-vue';
 import html2canvas from 'html2canvas';
 import { ImgInfoType } from './draggable.vue';
 import { computed, ref } from 'vue';
+import AutoImgs from '@/components/AutoImgs.vue';
 const { data } = defineProps<{
   data: ImgInfoType[]
 }>();
@@ -136,12 +137,16 @@ const modeClass = computed(() => {
         ref="imgsContainer"
         :style="`gap: ${gap}px; --max-size:${maxSize}px; --col: ${col}`"
       >
-        <img
-          class="transition-all block object-contain"
+        <AutoImgs
+          class="transition-all block"
           v-for="info in data"
           :key="info.id"
           :src="info.url"
-          :style="`border-radius: ${radius}px; max-width: ${maxSize}px; max-height: ${maxSize}px`"
+          :style="{
+            borderRadius: `${radius}px`,
+            maxWidth: `${maxSize}px`,
+            maxHeight: `${maxSize}px`
+          }"
           draggable="false"
         />
       </TransitionGroup>
@@ -173,6 +178,7 @@ const modeClass = computed(() => {
 
 .imgs-group-0 {
   display: flex;
+  align-items: center;
 }
 .imgs-group-1 {
   display: flex;
