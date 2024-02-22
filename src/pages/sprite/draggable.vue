@@ -1,5 +1,6 @@
 <script lang='ts' setup>
-import { ElButton } from 'element-plus';
+import { Delete } from '@element-plus/icons-vue';
+import { ElButton, ElIcon } from 'element-plus';
 import _ from 'lodash';
 import { ref } from 'vue';
 export type ImgInfoType = {
@@ -148,11 +149,14 @@ const fileInputRef = ref<HTMLInputElement>();
     >
   </div>
   <div
-    class="mask"
+    class="mask flex flex-col items-center gap-4 justify-center"
     v-show="showMask"
     @dragover="(e) => e.preventDefault()"
     @drop="handlerDelete"
-  ></div>
+  >
+    <ElIcon size="36" color="white"><Delete /></ElIcon>
+    <div class="text-white text-lg">拖出删除</div>
+  </div>
 </template>
 
 <style lang='scss' scoped>
@@ -193,7 +197,7 @@ const fileInputRef = ref<HTMLInputElement>();
 
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s ease;
+  transition: all .4s ease;
 }
 .list-enter-from,
 .list-leave-to {
@@ -205,6 +209,6 @@ const fileInputRef = ref<HTMLInputElement>();
   position: fixed;
   inset: 0;
   z-index: 5;
-  background-color: rgba($color: #000000, $alpha: .18);
+  background-color: rgba($color: #000000, $alpha: .38);
 }
 </style>

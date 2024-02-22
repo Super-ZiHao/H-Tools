@@ -1,5 +1,6 @@
 <script lang='ts' setup>
-import { ElButton, ElInput, ElOption, ElSelect } from 'element-plus';
+import { ElButton, ElIcon, ElInput, ElOption, ElSelect } from 'element-plus';
+import { Picture } from '@element-plus/icons-vue';
 import html2canvas from 'html2canvas';
 import { ImgInfoType } from './draggable.vue';
 import { computed, ref } from 'vue';
@@ -88,7 +89,7 @@ const modeClass = computed(() => {
 </script>
 
 <template>
-  <div class="h-full flex-1 w-0 flex flex-col gap-4">
+  <div class="border-[2px] border-cyan-400 p-2 rounded-md h-full flex-1 w-0 flex flex-col gap-4" v-if="data.length > 0">
     <!-- 排列 -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2 flex-wrap">
@@ -121,10 +122,13 @@ const modeClass = computed(() => {
           <template class="px-0" #prepend>col</template>
         </ElInput>
       </div>
-      <ElButton type="primary" @click="handlerDownloadImg">下载</ElButton>
+      <ElButton
+        type="primary"
+        @click="handlerDownloadImg"
+      >下载</ElButton>
     </div>
     <!-- 展示图片 -->
-    <div :class="`border-[2px] flex-1 ${modeClass} rounded-md border-cyan-400 overflow-auto p-2`">
+    <div :class="`imgs-group-background flex-1 ${modeClass} rounded-md overflow-auto`">
       <TransitionGroup
         :class="`imgs-group-${mode} bg-transparent`"
         tag="div"
@@ -143,12 +147,19 @@ const modeClass = computed(() => {
       </TransitionGroup>
     </div>
   </div>
+  <!-- 空态 -->
+  <div class="border-[2px] border-cyan-400 pb-2 flex-1 rounded-md flex flex-col gap-2 items-center justify-center" v-else>
+    <ElIcon color="#6c727f" size="32">
+      <Picture />
+    </ElIcon>
+    <div class=" text-gray-500 text-xs">暂未上传任何图像</div>
+  </div>
 </template>
 
 <style lang='scss' scoped>
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s ease;
+  transition: all .4s ease;
 }
 .list-enter-from,
 .list-leave-to {
@@ -173,5 +184,9 @@ const modeClass = computed(() => {
   grid-auto-rows: var(--max-size);
   align-items: center;
   justify-items: center;
+}
+.imgs-group-background {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAABlBMVEWgoKD///+BiQigAAAAEUlEQVQI12NgP8CAjH4wICMAfIMIvOGvGm0AAAAASUVORK5CYII=');
+  background-size: 20px;
 }
 </style>

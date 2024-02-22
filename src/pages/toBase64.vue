@@ -4,7 +4,7 @@ const { } = defineProps<Props>();
 </script>
 
 <template>
-  <div>123</div>
+  <div>待开发～～～</div>
 </template>
 
 <style lang='scss' scoped>
