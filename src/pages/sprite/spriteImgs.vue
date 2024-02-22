@@ -92,13 +92,13 @@ const modeClass = computed(() => {
     <!-- 排列 -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2 flex-wrap">
-        <ElInput style="width: 80px;" v-model="radius">
+        <ElInput style="width: 90px;" v-model="radius">
           <template class="px-0" #prepend>圆角</template>
         </ElInput>
         <ElInput style="width: 130px;" v-model="maxSize">
           <template class="px-0" #prepend>maxSize</template>
         </ElInput>
-        <ElInput style="width: 80px;" v-model="gap">
+        <ElInput style="width: 90px;" v-model="gap">
           <template class="px-0" #prepend>间距</template>
         </ElInput>
         <ElSelect style="width: 80px;" v-model="scale">
@@ -117,7 +117,7 @@ const modeClass = computed(() => {
             :value="item.value"
           />
         </ElSelect>
-        <ElInput style="width: 80px;" v-model="col" v-if="mode === Mode.Grid">
+        <ElInput style="width: 90px;" v-model="col" v-if="mode === Mode.Grid">
           <template class="px-0" #prepend>col</template>
         </ElInput>
       </div>
@@ -153,7 +153,7 @@ const modeClass = computed(() => {
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateY(30px);
+  scale: .9;
 }
 
 ::v-deep(.el-input-group__prepend) {

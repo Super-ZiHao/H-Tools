@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import getBase64ImageType from './getBase64ImageType';
+import downloadBase64 from './downloadBase64';
 
 type Options = {
   /** 图片前缀 */
@@ -19,19 +19,16 @@ function downloadBase64Imgs(base64: string[], options: Options = {}) {
   
   let downloadedImages = 1;
   let currentChunkIndex = 0;
-  const downloadImage = (base64Image: string) => {
-    // 创建一个a标签用于下载
-    let a = document.createElement('a');
-    a.href = base64Image;
-    a.download = `${name}_${downloadedImages}.${mimeType ?? getBase64ImageType(base64Image)}`; // 设置下载的文件名
-    document.body.appendChild(a); // 添加a标签到body中
-    a.click(); // 模拟点击下载
-    document.body.removeChild(a); // 移除a标签
-    downloadedImages++; // 增加下载图片的数量
-  }
   const newBase64 = _.chunk(base64, chunkSize);
   const timer = setInterval(() => {
-    newBase64[currentChunkIndex].forEach(downloadImage);
+    newBase64[currentChunkIndex].forEach((i) => {
+      downloadBase64({
+        base64: i,
+        name: `${name}_${downloadedImages}`,
+        mimeType,
+      })
+      downloadedImages++; // 增加下载图片的数量
+    });
     currentChunkIndex += 1;
     if (currentChunkIndex > newBase64.length - 1) {
       clearInterval(timer);

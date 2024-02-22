@@ -12,6 +12,11 @@ export const toolsRouter: RouteRecordRaw[] = [
     name: 'base64-to-Img',
     component: () => import('@/pages/base64Img.vue'),
   },
+  {
+    path: '/to-base64',
+    name: 'to-base64',
+    component: () => import('@/pages/toBase64.vue'),
+  }
 ]
 
 const routes: RouteRecordRaw[] = [

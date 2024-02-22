@@ -198,7 +198,7 @@ const fileInputRef = ref<HTMLInputElement>();
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateY(20px);
+  scale: .9;
 }
 
 .mask {
