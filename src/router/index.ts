@@ -8,15 +8,15 @@ export const toolsRouter: RouteRecordRaw[] = [
     component: () => import('@/pages/sprite/index.vue'),
   },
   {
-    path: '/base64-to-Img',
-    name: 'base64-to-Img',
+    path: '/file-download',
+    name: '文件下载',
     component: () => import('@/pages/base64Img.vue'),
   },
-  {
-    path: '/to-base64',
-    name: 'to-base64',
-    component: () => import('@/pages/toBase64.vue'),
-  }
+  // {
+  //   path: '/to-base64',
+  //   name: 'to-base64',
+  //   component: () => import('@/pages/toBase64.vue'),
+  // }
 ]
 
 const routes: RouteRecordRaw[] = [

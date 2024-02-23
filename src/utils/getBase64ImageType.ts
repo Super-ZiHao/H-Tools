@@ -1,5 +1,5 @@
 /**
- * 
+ * 解析 base64 字符串类型，返回文件格式
  * @param base64String base64图片字符串
  * @returns 类型
  */

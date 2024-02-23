@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import downloadBase64 from './downloadBase64';
+import downloadFile from './downloadFile'
 
 type Options = {
   /** 图片前缀 */
@@ -11,19 +11,18 @@ type Options = {
 }
 /**
  * @description 批量下载 base64 图片
- * @param base64 图片地址
+ * @param url 图片地址
  * @param [options={}] 配置项
  */
-function downloadBase64Imgs(base64: string[], options: Options = {}) {
+function downloadBase64Imgs(url: string[], options: Options = {}) {
   const { name = 'image_', mimeType, chunkSize = 5 } = options;
-  
   let downloadedImages = 1;
   let currentChunkIndex = 0;
-  const newBase64 = _.chunk(base64, chunkSize);
+  const newBase64 = _.chunk(url, chunkSize);
   const timer = setInterval(() => {
     newBase64[currentChunkIndex].forEach((i) => {
-      downloadBase64({
-        base64: i,
+      downloadFile({
+        url: i,
         name: `${name}_${downloadedImages}`,
         mimeType,
       })

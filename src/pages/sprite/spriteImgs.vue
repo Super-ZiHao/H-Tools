@@ -172,10 +172,6 @@ const modeClass = computed(() => {
   scale: .9;
 }
 
-::v-deep(.el-input-group__prepend) {
-  padding: 0 8px;
-}
-
 .imgs-group-0 {
   display: flex;
   align-items: center;

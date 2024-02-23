@@ -16,5 +16,8 @@ import Main from './components/main.vue';
   </Main>
 </template>
 
-<style scoped>
+<style>
+html .el-input-group__prepend {
+  padding: 0 8px;
+}
 </style>
