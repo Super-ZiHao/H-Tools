@@ -8,6 +8,8 @@ export type ImgInfoType = {
   id: string;
   /** 图片地址 */
   url: string;
+  /** 图片base64 */
+  base64: string;
   /** 图片名字 */
   name: string
   /** 图片类型（格式） */
@@ -33,17 +35,20 @@ const fileInfoFormat = (files: File[]) => {
   const imgs: File[] = files.filter(file => file.type.startsWith('image/'));
   // 处理图片
   imgs.forEach(img => {
-    // 获取图片的宽高
     const imgUrl = URL.createObjectURL(img);
-    const image = new Image();
-    image.src = imgUrl;
-    const info:ImgInfoType = {
-      id: _.uniqueId(),
-      name: img.name,
-      url: imgUrl,
-      type: img.type,
+    const reader = new FileReader();
+    reader.readAsDataURL(img);
+    reader.onload = function(e) {
+      const base64String = (e.target as any).result;
+      const info:ImgInfoType = {
+        id: _.uniqueId(),
+        name: img.name,
+        url: imgUrl,
+        base64: base64String,
+        type: img.type,
+      }
+      imgInfoArr.value?.push(info);
     }
-    imgInfoArr.value?.push(info);
   })
 };
 const handlerDrop = (e: DragEvent) => {

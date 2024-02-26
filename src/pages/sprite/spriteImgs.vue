@@ -90,7 +90,7 @@ const modeClass = computed(() => {
 </script>
 
 <template>
-  <div class="border-[2px] border-cyan-400 p-2 rounded-md h-full flex-1 w-0 flex flex-col gap-4" v-if="data.length > 0">
+  <div class="h-full flex-1 w-0 flex flex-col gap-4" v-if="data.length > 0">
     <!-- 排列 -->
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2 flex-wrap">
@@ -129,7 +129,7 @@ const modeClass = computed(() => {
       >下载</ElButton>
     </div>
     <!-- 展示图片 -->
-    <div :class="`imgs-group-background flex-1 ${modeClass} rounded-md overflow-auto`">
+    <div :class="`imgs-group-background flex-1 border-[2px] border-cyan-400 ${modeClass} rounded-md overflow-auto`">
       <TransitionGroup
         :class="`imgs-group-${mode} bg-transparent`"
         tag="div"
@@ -153,7 +153,7 @@ const modeClass = computed(() => {
     </div>
   </div>
   <!-- 空态 -->
-  <div class="border-[2px] border-cyan-400 pb-2 flex-1 rounded-md flex flex-col gap-2 items-center justify-center" v-else>
+  <div class="border-[2px] border-cyan-400 flex-1 rounded-md flex flex-col gap-2 items-center justify-center" v-else>
     <ElIcon color="#6c727f" size="32">
       <Picture />
     </ElIcon>
@@ -172,12 +172,12 @@ const modeClass = computed(() => {
   scale: .9;
 }
 
-.imgs-group-0 {
+.imgs-group-0,
+.imgs-group-1 {
   display: flex;
   align-items: center;
 }
 .imgs-group-1 {
-  display: flex;
   flex-direction: column;
 }
 .imgs-group-2 {

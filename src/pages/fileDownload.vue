@@ -78,23 +78,21 @@ const canDownloadNum = computed(() => {
 <template>
   <div class="text-2xl mb-6">文件下载（base64、url）</div>
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex items-start flex-col gap-3">
-    <div class="w-full flex justify-between items-center h-8">
-      <div>识别出可下载数量: {{canDownloadNum}}</div>
+    <div class="relative w-full flex justify-between items-center h-8">
+      <div class="flex items-center gap-4">
+        <ElInput style="width: 160px;" v-model="nameValue" placeholder="例: user">
+          <template #prepend>名称前缀</template>
+        </ElInput>
+        <ElInput style="width: 160px;" v-model="deepValue" placeholder="例: a.b.c">
+          <template #prepend>属性层级</template>
+        </ElInput>
+      </div>
+      <div class="absolute left-[50%] translate-x-[-50%]">识别可下载数量: {{canDownloadNum}}</div>
       <div class="flex items-centr gap-1 h-full">
-        <ElButton>格式化</ElButton>
         <ElButton :disabled="isJsonError || isDeepError || canDownloadNum === 0" type="primary" @click="handlerDownload">下载</ElButton>
       </div>
     </div>
     <div class="JSON-Editor" ref="jsonRef"></div>
-
-    <div class="flex mt-4 gap-4 w-full" style="justify-self: end;">
-      <ElInput style="width: 140px;" v-model="nameValue" placeholder="例: user">
-        <template #prepend>名称前缀</template>
-      </ElInput>
-      <ElInput style="width: 160px;" v-model="deepValue" placeholder="例: a.b.c">
-        <template #prepend>属性层级</template>
-      </ElInput>
-    </div>
     <div class=" mt-auto mx-auto">
       <span class=" text-sm text-gray-400">ps: 编辑器最外层仅能为数组格式，否则程序将会无法使用</span>
     </div>
@@ -104,6 +102,6 @@ const canDownloadNum = computed(() => {
 <style lang='scss' scoped>
 .JSON-Editor {
   width: 100%;
-  height: 70%;
+  height: 90%;
 }
 </style>

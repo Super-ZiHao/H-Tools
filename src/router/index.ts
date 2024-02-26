@@ -10,13 +10,13 @@ export const toolsRouter: RouteRecordRaw[] = [
   {
     path: '/file-download',
     name: '文件下载',
-    component: () => import('@/pages/base64Img.vue'),
+    component: () => import('@/pages/fileDownload.vue'),
   },
-  // {
-  //   path: '/to-base64',
-  //   name: 'to-base64',
-  //   component: () => import('@/pages/toBase64.vue'),
-  // }
+  {
+    path: '/to-base64',
+    name: '转base64',
+    component: () => import('@/pages/toBase64/index.vue'),
+  }
 ]
 
 const routes: RouteRecordRaw[] = [
