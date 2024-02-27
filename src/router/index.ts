@@ -16,6 +16,11 @@ export const toolsRouter: RouteRecordRaw[] = [
     path: '/to-base64',
     name: '转base64',
     component: () => import('@/pages/toBase64/index.vue'),
+  },
+  {
+    path: '/scss-to-css',
+    name: 'scss转css',
+    component: () => import('@/pages/scssToCss/index.vue'),
   }
 ]
 

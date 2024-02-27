@@ -57,17 +57,17 @@ const handlerCopy = () => {
       </ElButton>
     </div>
     <!-- 展示 json 代码 -->
-    <div class="flex flex-col border-[2px] rounded-md overflow-auto overflow-x-hidden flex-1 border-cyan-400 p-2 text-gray-400" v-if="(typeof previewCode[0] === 'string')">
+    <div class="flex flex-col border-[2px] rounded-md overflow-y-auto overflow-x-hidden flex-1 border-cyan-400 p-2 text-gray-400" v-if="(typeof previewCode[0] === 'string')">
       [
         <div class="text-ellipsis w-full overflow-hidden" v-for="(base64, idx) in previewCode" :key="idx">&nbsp;&nbsp;&nbsp;&nbsp;"{{ base64.slice(0, 100) }}..."</div>
       ]
     </div>
-    <div class="flex flex-col border-[2px] rounded-md overflow-auto overflow-x-hidden flex-1 border-cyan-400 p-2 text-gray-400" v-else>
+    <div class="flex flex-col border-[2px] rounded-md overflow-y-auto overflow-x-hidden flex-1 border-cyan-400 p-2 text-gray-400" v-else>
       [
-        <div class="text-ellipsis w-full overflow-hidden" v-for="(item, idx) in previewCode" :key="idx">
-          &nbsp;&nbsp;&nbsp;&nbsp;{
+        <div class="text-ellipsis w-full h-fit" v-for="(item, idx) in previewCode" :key="idx">
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;{</div>
           <div v-for="(key, idx2) in Object.keys(item)" :key="`${idx}-${idx2}`" class=" text-ellipsis overflow-hidden w-full text-nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ key }}: "{{ item[key].slice(0, 100) }}",</div>
-          &nbsp;&nbsp;&nbsp;&nbsp;},
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;},</div>
         </div>
       ]
     </div>
