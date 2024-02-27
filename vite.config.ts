@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import { visualizer } from 'rollup-plugin-visualizer';
 import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
+import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 
 enum PackageType {
   ElementPlus = 'element-plus',
@@ -28,6 +29,9 @@ const getCompleteUrl = (name: string, css?: boolean) => {
 export default defineConfig({
   plugins: [
     vue(),
+    (monacoEditorPlugin as any).default({
+      languageWorkers: ['css']
+    }),
     visualizer({ open: true }), // 打包产物明细
     importToCDN({
       prodUrl: 'https://cdn.jsdelivr.net/npm/{name}@{version}/{path}',
@@ -57,7 +61,7 @@ export default defineConfig({
           path: 'dist/html2canvas.min.js',
         },
       ]
-    })
+    }),
   ],
   base: '/h-tools/',
   resolve: {

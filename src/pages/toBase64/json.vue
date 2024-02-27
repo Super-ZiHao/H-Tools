@@ -3,7 +3,7 @@ import { ElButton, ElCheckbox, ElMessage } from 'element-plus';
 import { CopyDocument } from '@element-plus/icons-vue';
 import { ImgInfoType } from '../sprite/draggable.vue';
 import { computed, reactive } from 'vue';
-import clipboard from 'clipboard';
+import * as clipboard from 'clipboard';
 
 const { data } = defineProps<{
   data: ImgInfoType[]

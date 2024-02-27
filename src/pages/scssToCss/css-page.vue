@@ -1,9 +1,9 @@
 <script lang='ts' setup>
-import CodeEditor from '@/components/code-editor.vue';
+import CodeEditor from '@/components/code-editor/index.vue';
 </script>
 
 <template>
-  <CodeEditor lang="css" value="body{}" :readonly="true" />
+  <CodeEditor language="css" value="body{}" :readonly="true" />
 </template>
 
 <style lang='scss' scoped>
