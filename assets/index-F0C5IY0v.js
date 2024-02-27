@@ -1,4 +1,4 @@
-import{D as X}from"./draggable-U-lq5A1G.js";import{_ as K}from"./index-BH7SGdYY.js";var Q=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},P={exports:{}};/*!
+import{D as X}from"./draggable-DwYod33K.js";import{_ as K}from"./index-5cXG_p0T.js";var Q=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},P={exports:{}};/*!
  * clipboard.js v2.0.11
  * https://clipboardjs.com/
  *
