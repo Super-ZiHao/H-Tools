@@ -1,18 +1,18 @@
-import { editor } from 'monaco-editor/esm/vs/editor/editor.api'
+import { editor } from 'monaco-editor'
 import { ref, nextTick, onBeforeUnmount } from 'vue'
 const DEFAULT_EDITOR_OPTION: editor.IStandaloneEditorConstructionOptions = {
   
 };
 function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptions = DEFAULT_EDITOR_OPTION) {
   // 编辑器示例
-  let monacoEditor: editor.IStandaloneCodeEditor | null = null
+  const monacoEditor = ref<editor.IStandaloneCodeEditor | null>(null)
   // 目标元素
   const monacoEditorRef = ref<HTMLElement | null>(null)
 
   /** 创建实例初始化 */
   function createEditor() {
     if(!monacoEditorRef.value) return
-    monacoEditor = editor.create(monacoEditorRef.value, {
+    monacoEditor.value = editor.create(monacoEditorRef.value, {
       // 初始模型
       model: editor.createModel('', editorOption.language),
       // 是否启用预览图
@@ -58,7 +58,7 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
 
   // 格式化
   async function formatDoc() {
-    await monacoEditor?.getAction('editor.action.formatDocument')?.run()
+    await monacoEditor.value?.getAction('editor.action.formatDocument')?.run()
   }
 
   // 数据更新
@@ -67,7 +67,7 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
       if(getOption(editor.EditorOption.readOnly)) {
         updateOptions({ readOnly: false })
       }
-      monacoEditor?.setValue(val)
+      monacoEditor.value?.setValue(val)
       setTimeout(async () => {
         await formatDoc()
       }, 10)
@@ -76,30 +76,25 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
 
   // 配置更新
   function updateOptions(opt: editor.IStandaloneEditorConstructionOptions) {
-    monacoEditor?.updateOptions(opt)
+    monacoEditor.value?.updateOptions(opt)
   }
 
   // 获取配置
   function getOption(name: editor.EditorOption) {
-    return monacoEditor?.getOption(name)
-  }
-
-  // 获取实例
-  function getEditor() {
-    return monacoEditor
+    return monacoEditor.value?.getOption(name)
   }
 
   // 页面离开 销毁
   onBeforeUnmount(() => {
     if(monacoEditor) {
-      monacoEditor.dispose()
+      monacoEditor.value?.dispose()
     }
   })
 
   return {
     monacoEditorRef,
+    monacoEditor,
     createEditor,
-    getEditor,
     updateVal,
     updateOptions,
     getOption,

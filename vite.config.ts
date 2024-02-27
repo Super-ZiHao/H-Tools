@@ -30,10 +30,10 @@ export default defineConfig({
   plugins: [
     vue(),
     (monacoEditorPlugin as any).default({
-      languageWorkers: ['css']
+      languageWorkers: ['css'],
     }),
-    visualizer({ open: true }), // 打包产物明细
-    importToCDN({
+    visualizer({ open: false }), // 打包产物明细
+    importToCDN({ // 部分 《npm依赖》 打包产物 CDN 化
       prodUrl: 'https://cdn.jsdelivr.net/npm/{name}@{version}/{path}',
       modules: [
         autoComplete('vue'),
