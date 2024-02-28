@@ -1,5 +1,5 @@
 import { editor } from 'monaco-editor'
-import { ref, nextTick, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, toRaw } from 'vue'
 const DEFAULT_EDITOR_OPTION: editor.IStandaloneEditorConstructionOptions = {
   
 };
@@ -14,29 +14,26 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
     if(!monacoEditorRef.value) return
     monacoEditor.value = editor.create(monacoEditorRef.value, {
       // 初始模型
-      model: editor.createModel('', editorOption.language),
+      model: editor.createModel(editorOption.value ?? '', editorOption.language),
       // 是否启用预览图
       minimap: { enabled: true },
-      // 主题
-      // theme: 
       // 主键
       multiCursorModifier: 'ctrlCmd',
       // 滚动条
       scrollbar: {
-        verticalScrollbarSize: 8,
-        horizontalScrollbarSize: 8
+        verticalScrollbarSize: 4,
+        horizontalScrollbarSize: 4,
       },
       // 行号
       lineNumbers: 'on',
       // tab大小
       tabSize: 2,
       //字体大小
-      fontSize: 16,
+      fontSize: 14,
       // 控制编辑器在用户键入、粘贴、移动或缩进行时是否应自动调整缩进
       autoIndent: 'advanced',
       // 自动布局
       automaticLayout: true,
-      language: editorOption.language,
       renderLineHighlight: "gutter",
       folding: true, // 是否折叠
       roundedSelection: false,
@@ -51,7 +48,7 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
       colorDecorators: true, // 颜色装饰器
       accessibilitySupport: "on", // 辅助功能支持  "auto" | "off" | "on"
       lineNumbersMinChars: 5, // 行号最小字符   number
-      ...editorOption
+      ...editorOption,
     })
     return monacoEditor
   }
@@ -63,15 +60,10 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
 
   // 数据更新
   function updateVal(val: string) {
-    nextTick(() => {
-      if(getOption(editor.EditorOption.readOnly)) {
-        updateOptions({ readOnly: false })
-      }
-      monacoEditor.value?.setValue(val)
-      setTimeout(async () => {
-        await formatDoc()
-      }, 10)
-    })
+    const editor = toRaw(monacoEditor.value);
+    if (editor) {
+      editor.setValue(val);
+    }
   }
 
   // 配置更新

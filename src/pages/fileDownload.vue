@@ -1,40 +1,16 @@
 <script lang='ts' setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import isValidVariableName from '@/utils/isValidVariableName.ts'
 import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64String from '@/utils/isBase64String.ts'
 import _ from 'lodash';
-import JSONEditor from 'jsoneditor';
 import { ElButton, ElInput } from 'element-plus';
+import CodeEditor from '@/components/code-editor/index.vue';
 
 const jsonValue = ref<any>([]);
 const deepValue = ref<string>('');
 const nameValue = ref<string>('image_');
 const isJsonError = ref<boolean>(false);
-
-/** json 编辑器 */
-const jsonRef = ref<HTMLDivElement>();
-const editor = ref();
-onMounted(() => {
-  if (!jsonRef.value) return;
-  editor.value  = new JSONEditor(jsonRef.value, {
-    mode: "code",
-    mainMenuBar: false,
-    schema: {
-      base64: [],
-    },
-    onChangeText(jsonString) {
-      try {
-        const json = JSON.parse(jsonString);
-        jsonValue.value = json;
-        isJsonError.value = false;
-      } catch (error) {
-        isJsonError.value = true;
-      }
-    },
-  });
-  editor.value.setText(`[\n  \n]`)
-})
 
 /** 层级语法错误 */
 const isDeepError = computed(() => {
@@ -73,11 +49,21 @@ const canDownloadNum = computed(() => {
   }).length;
 })
 
+const changeEditor = (val: string) => {
+  try {
+    const json = JSON.parse(val);
+    jsonValue.value = json;
+    isJsonError.value = false;
+  } catch (error) {
+    isJsonError.value = true;
+  }
+}
+
 </script>
 
 <template>
-  <div class="text-2xl mb-6">文件下载（base64、url）</div>
-  <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex items-start flex-col gap-3">
+  <div class="text-2xl mb-6 text-[#5C8374]">文件下载（base64、url）</div>
+  <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex items-start flex-col gap-4">
     <div class="relative w-full flex justify-between items-center h-8">
       <div class="flex items-center gap-4">
         <ElInput style="width: 160px;" v-model="nameValue" placeholder="例: user">
@@ -92,10 +78,7 @@ const canDownloadNum = computed(() => {
         <ElButton :disabled="isJsonError || isDeepError || canDownloadNum === 0" type="primary" @click="handlerDownload">下载</ElButton>
       </div>
     </div>
-    <div class="JSON-Editor" ref="jsonRef"></div>
-    <div class=" mt-auto mx-auto">
-      <span class=" text-sm text-gray-400">ps: 编辑器最外层仅能为数组格式，否则程序将会无法使用</span>
-    </div>
+    <CodeEditor language="json" value="[]" @change="changeEditor" />
   </div>
 </template>
 

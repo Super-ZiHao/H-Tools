@@ -7,7 +7,6 @@ import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 
 enum PackageType {
   ElementPlus = 'element-plus',
-  JSONEditor = 'jsoneditor',
   html2canvas = 'html2canvas',
   VueRouter = 'vue-router',
   ElementPlusIconsVue = '@element-plus/icons-vue',
@@ -30,7 +29,7 @@ export default defineConfig({
   plugins: [
     vue(),
     (monacoEditorPlugin as any).default({
-      languageWorkers: ['css'],
+      languageWorkers: ['css', 'json'],
     }),
     visualizer({ open: false }), // 打包产物明细
     importToCDN({ // 部分 《npm依赖》 打包产物 CDN 化
@@ -50,11 +49,6 @@ export default defineConfig({
         {
           ...getCompleteUrl(PackageType.ElementPlusIconsVue),
           path: 'dist/index.iife.min.js',
-        },
-        {
-          ...getCompleteUrl(PackageType.JSONEditor),
-          css: 'dist/jsoneditor.min.css',
-          path: 'dist/jsoneditor.min.js',
         },
         {
           ...getCompleteUrl(PackageType.html2canvas),
