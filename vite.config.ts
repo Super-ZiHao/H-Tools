@@ -35,25 +35,25 @@ export default defineConfig({
     importToCDN({ // 部分 《npm依赖》 打包产物 CDN 化
       prodUrl: 'https://cdn.jsdelivr.net/npm/{name}@{version}/{path}',
       modules: [
-        autoComplete('vue'),
-        autoComplete("lodash"),
-        {
-          ...getCompleteUrl(PackageType.VueRouter),
-          path: 'dist/vue-router.global.min.js'
-        },
-        {
-          ...getCompleteUrl(PackageType.ElementPlus),
-          css: `dist/index.min.css`,
-          path: 'dist/index.full.min.js',
-        },
-        {
-          ...getCompleteUrl(PackageType.ElementPlusIconsVue),
-          path: 'dist/index.iife.min.js',
-        },
-        {
-          ...getCompleteUrl(PackageType.html2canvas),
-          path: 'dist/html2canvas.min.js',
-        },
+        // autoComplete('vue'),
+        // autoComplete("lodash"),
+        // {
+        //   ...getCompleteUrl(PackageType.VueRouter),
+        //   path: 'dist/vue-router.global.min.js'
+        // },
+        // {
+        //   ...getCompleteUrl(PackageType.ElementPlus),
+        //   css: `dist/index.min.css`,
+        //   path: 'dist/index.full.min.js',
+        // },
+        // {
+        //   ...getCompleteUrl(PackageType.ElementPlusIconsVue),
+        //   path: 'dist/index.iife.min.js',
+        // },
+        // {
+        //   ...getCompleteUrl(PackageType.html2canvas),
+        //   path: 'dist/html2canvas.min.js',
+        // },
       ]
     }),
   ],

@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import CodeEditor from '@/components/code-editor/index.vue';
 import { compileString } from 'sass';
 
