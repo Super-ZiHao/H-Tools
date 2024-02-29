@@ -78,8 +78,8 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
 
   // 页面离开 销毁
   onBeforeUnmount(() => {
-    if(monacoEditor) {
-      monacoEditor.value?.dispose()
+    if(monacoEditor.value) {
+      // monacoEditor.value?.dispose()
     }
   })
 

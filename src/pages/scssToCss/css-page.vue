@@ -1,19 +1,26 @@
 <script lang='ts' setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import CodeEditor from '@/components/code-editor/index.vue';
+import { compileString } from 'sass';
 
 const props = defineProps<{
   value: string
-}>()
+}>();
 
-const cssCode = computed(() => {
-  return props.value;
-});
+const code = ref('');
+
+watch(() => props.value, (newValue) => {
+  try {
+    const compile = compileString(newValue);
+    code.value = compile.css;
+  } catch (error) {
+  }
+})
 
 </script>
 
 <template>
-  <CodeEditor language="css" :value="cssCode" :readonly="true" />
+  <CodeEditor language="css" :value="code" :readonly="true" />
 </template>
 
 <style lang='scss' scoped>

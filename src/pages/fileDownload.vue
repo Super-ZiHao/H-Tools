@@ -5,8 +5,12 @@ import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64String from '@/utils/isBase64String.ts'
 import _ from 'lodash';
 import { ElButton, ElInput } from 'element-plus';
-import CodeEditor from '@/components/code-editor/index.vue';
+import CodeEditor, { CodeEditorFun } from '@/components/code-editor/index.vue';
+import Title from '@/components/title.vue';
 
+const DEFAULT_EDITRO_VALUE = `[
+  
+]`
 const jsonValue = ref<any>([]);
 const deepValue = ref<string>('');
 const nameValue = ref<string>('image_');
@@ -59,10 +63,12 @@ const changeEditor = (val: string) => {
   }
 }
 
+const CodeEditorRef = ref<CodeEditorFun>();
+
 </script>
 
 <template>
-  <div class="text-2xl mb-6 text-[#5C8374]">文件下载（base64、url）</div>
+  <Title>文件下载（base64、url）</Title>
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex items-start flex-col gap-4">
     <div class="relative w-full flex justify-between items-center h-8">
       <div class="flex items-center gap-4">
@@ -75,10 +81,11 @@ const changeEditor = (val: string) => {
       </div>
       <div class="absolute left-[50%] translate-x-[-50%]">识别可下载数量: {{canDownloadNum}}</div>
       <div class="flex items-centr gap-1 h-full">
+        <ElButton @click="CodeEditorRef?.formatCode">格式化</ElButton>
         <ElButton :disabled="isJsonError || isDeepError || canDownloadNum === 0" type="primary" @click="handlerDownload">下载</ElButton>
       </div>
     </div>
-    <CodeEditor language="json" value="[]" @change="changeEditor" />
+    <CodeEditor language="json" :value="DEFAULT_EDITRO_VALUE" @change="changeEditor" ref="CodeEditorRef"/>
   </div>
 </template>
 

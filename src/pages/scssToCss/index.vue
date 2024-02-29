@@ -2,12 +2,13 @@
 import CssPage from './css-page.vue';
 import CodeEditor from '@/components/code-editor/index.vue';
 import { ref } from 'vue';
+import Title from '@/components/title.vue';
 
 const value = ref('');
 </script>
 
 <template>
-  <div class="text-2xl mb-6 text-[#5C8374]">Scss 转 CSS(未完成)</div>
+  <Title>Scss 转 CSS（未完成）</Title>
   <!-- <iframe src="https://www.sassmeister.com/" class="w-full h-full rounded-xl overflow-hidden shadow-2xl border max-w-[1440px]"></iframe> -->
 
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4">

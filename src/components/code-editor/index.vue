@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<{
   readonly: false,
 })
 
-const { monacoEditorRef, createEditor, monacoEditor, updateVal } = useMonacoEditor({
+const { monacoEditorRef, createEditor, monacoEditor, updateVal, formatDoc } = useMonacoEditor({
   language: props.language,
   value: props.value,
   readOnly: props.readonly,
@@ -38,6 +38,21 @@ onMounted(() => {
 })
 watch(() => props.value, (newVal) => {
   updateVal(newVal ?? '');
+})
+
+
+
+/** 暴露方法 */
+export type CodeEditorFun = {
+  /** 格式化数组 */
+  formatCode: typeof formatCode
+}
+// 格式化代码
+const formatCode = () => {
+  formatDoc()
+}
+defineExpose<CodeEditorFun>({
+  formatCode,
 })
 
 </script>
