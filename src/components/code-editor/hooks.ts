@@ -26,6 +26,8 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
       },
       // 行号
       lineNumbers: 'on',
+      // 禁用右键菜单
+      contextmenu: false,
       // tab大小
       tabSize: 2,
       //字体大小

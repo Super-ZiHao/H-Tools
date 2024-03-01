@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { chunk } from 'lodash-es';
 import downloadFile from './downloadFile'
 
 type Options = {
@@ -18,7 +18,7 @@ function downloadBase64Imgs(url: string[], options: Options = {}) {
   const { name = 'image_', mimeType, chunkSize = 5 } = options;
   let downloadedImages = 1;
   let currentChunkIndex = 0;
-  const newBase64 = _.chunk(url, chunkSize);
+  const newBase64 = chunk(url, chunkSize);
   const timer = setInterval(() => {
     newBase64[currentChunkIndex].forEach((i) => {
       downloadFile({

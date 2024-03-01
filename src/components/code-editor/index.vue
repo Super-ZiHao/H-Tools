@@ -2,6 +2,7 @@
 <script lang='ts' setup>
 import { onBeforeUnmount, onMounted, toRaw, watch } from 'vue';
 import useMonacoEditor from './hooks';
+import { copy } from 'clipboard';
 
 const emit = defineEmits(['change']);
 const props = withDefaults(defineProps<{
@@ -28,8 +29,8 @@ onMounted(() => {
 
   // 监测更新
   const didChangeModelContent = monacoEditor.value?.onDidChangeModelContent(() => {
-    const model = toRaw(monacoEditor.value)?.getValue();
-    emit('change', model);
+    const value = toRaw(monacoEditor.value)?.getValue();
+    emit('change', value);
   })
 
   onBeforeUnmount(() => {
@@ -41,18 +42,22 @@ watch(() => props.value, (newVal) => {
 })
 
 
-
-/** 暴露方法 */
-export type CodeEditorFun = {
-  /** 格式化数组 */
-  formatCode: typeof formatCode
-}
 // 格式化代码
 const formatCode = () => {
   formatDoc()
 }
-defineExpose<CodeEditorFun>({
+const copyString = (v?: string) => {
+  const value = v ? v : toRaw(monacoEditor.value)?.getValue();
+  if (value) {
+    copy(value);
+    ElMessage.success('复制成功');
+  } else {
+    ElMessage.error('出错了❌')
+  }
+}
+defineExpose({
   formatCode,
+  copyString,
 })
 
 </script>

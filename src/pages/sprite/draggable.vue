@@ -1,7 +1,6 @@
 <script lang='ts' setup>
 import { Delete } from '@element-plus/icons-vue';
-import { ElButton, ElIcon } from 'element-plus';
-import _ from 'lodash';
+import { uniqueId } from 'lodash-es';
 import { ref } from 'vue';
 export type ImgInfoType = {
   /** 唯一 id */
@@ -41,7 +40,7 @@ const fileInfoFormat = (files: File[]) => {
     reader.onload = function(e) {
       const base64String = (e.target as any).result;
       const info:ImgInfoType = {
-        id: _.uniqueId(),
+        id: uniqueId(),
         name: img.name,
         url: imgUrl,
         base64: base64String,

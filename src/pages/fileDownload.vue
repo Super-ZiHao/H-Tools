@@ -3,8 +3,7 @@ import { ref, computed } from 'vue';
 import isValidVariableName from '@/utils/isValidVariableName.ts'
 import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64String from '@/utils/isBase64String.ts'
-import _ from 'lodash';
-import { ElButton, ElInput } from 'element-plus';
+import { get } from 'lodash-es';
 import CodeEditor, { CodeEditorFun } from '@/components/code-editor/index.vue';
 import Title from '@/components/title.vue';
 
@@ -31,7 +30,7 @@ const handlerDownload = () => {
       return;
     }
     default: {
-      downloadImgs(jsonValue.value.map((i: any) => _.get(i, deepValue.value)), { name: nameValue.value })
+      downloadImgs(jsonValue.value.map((i: any) => get(i, deepValue.value)), { name: nameValue.value })
       return;
     }
   }
@@ -40,7 +39,7 @@ const handlerDownload = () => {
 /** 当前 json 中识别出可下载的数量 */
 const canDownloadNum = computed(() => {
   if (isJsonError.value || isDeepError.value) return 0;
-  const nestedValuesArr = jsonValue.value.map((i: any) => _.get(i, deepValue.value))
+  const nestedValuesArr = jsonValue.value.map((i: any) => get(i, deepValue.value))
   return (deepValue.value === '' ? jsonValue.value : nestedValuesArr).filter((i: string) => {
     try {
       const url = new URL(i);
@@ -63,8 +62,7 @@ const changeEditor = (val: string) => {
   }
 }
 
-const CodeEditorRef = ref<CodeEditorFun>();
-
+const CodeEditorRef = ref<InstanceType<typeof CodeEditor>>();
 </script>
 
 <template>

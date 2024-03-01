@@ -1,5 +1,4 @@
 <script lang='ts' setup>
-import { ElButton, ElIcon, ElInput, ElOption, ElSelect } from 'element-plus';
 import { Picture } from '@element-plus/icons-vue';
 import html2canvas from 'html2canvas';
 import { ImgInfoType } from './draggable.vue';

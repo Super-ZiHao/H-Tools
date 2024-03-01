@@ -1,9 +1,7 @@
 <script lang='ts' setup>
-import { ElButton, ElCheckbox, ElMessage } from 'element-plus';
 import { CopyDocument } from '@element-plus/icons-vue';
 import { ImgInfoType } from '../sprite/draggable.vue';
-import { reactive } from 'vue';
-import { copy } from 'clipboard';
+import { reactive, ref } from 'vue';
 import CodeEditor from '@/components/code-editor/index.vue';
 
 const { data } = defineProps<{
@@ -38,10 +36,7 @@ const getPreviewCode = (sliceBase64?: boolean) => {
   return code;
 };
 
-const handlerCopy = () => {
-  copy(JSON.stringify(getPreviewCode(false), null, 4));
-  ElMessage.success('复制成功');
-}
+const jsonEditorRef = ref<InstanceType<typeof CodeEditor>>();
 
 </script>
 
@@ -54,12 +49,17 @@ const handlerCopy = () => {
         <ElCheckbox v-model="options.name" label="名字" size="default" />
         <ElCheckbox v-model="options.type" label="类型" size="default" />
       </div>
-      <ElButton :icon="CopyDocument" @click="handlerCopy">
+      <ElButton :icon="CopyDocument" @click="jsonEditorRef?.copyString(JSON.stringify(getPreviewCode(false), null, 2))">
         Copy
       </ElButton>
     </div>
     <!-- 展示 json 代码 -->
-    <CodeEditor language="json" :readonly="true" :value="JSON.stringify(getPreviewCode(true), null, 2)" />
+    <CodeEditor
+      language="json"
+      :readonly="true"
+      :value="JSON.stringify(getPreviewCode(true), null, 2)"
+      ref="jsonEditorRef"
+    />
   </div>
 </template>
 
