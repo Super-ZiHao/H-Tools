@@ -1,42 +1,12 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>self["MonacoEnvironment"] = (function (paths) {
-          return {
-            globalAPI: false,
-            getWorkerUrl : function (moduleId, label) {
-              var result =  paths[label];
-              if (/^((http:)|(https:)|(file:)|(\/\/))/.test(result)) {
-                var currentUrl = String(window.location);
-                var currentOrigin = currentUrl.substr(0, currentUrl.length - window.location.hash.length - window.location.search.length - window.location.pathname.length);
-                if (result.substring(0, currentOrigin.length) !== currentOrigin) {
-                  var js = '/*' + label + '*/importScripts("' + result + '");';
-                  var blob = new Blob([js], { type: 'application/javascript' });
-                  return URL.createObjectURL(blob);
-                }
-              }
-              return result;
-            }
-          };
-        })({
-  "css": "/h-tools/h-tools/monacoeditorwork/css.worker.bundle.js",
-  "json": "/h-tools/h-tools/monacoeditorwork/json.worker.bundle.js",
-  "less": "/h-tools/h-tools/monacoeditorwork/css.worker.bundle.js",
-  "scss": "/h-tools/h-tools/monacoeditorwork/css.worker.bundle.js"
-});</script>
-
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/h-tools/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>工具箱 🧰</title><link href="https://cdn.jsdelivr.net/npm/element-plus@2.5.6/dist/index.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/vue@3.4.20/dist/vue.global.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-router@4.3.0/dist/vue-router.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/element-plus@2.5.6/dist/index.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@2.3.1/dist/index.iife.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script type="module" crossorigin src="/h-tools/assets/index-D4QfcvDj.js"></script>
-    <link rel="stylesheet" crossorigin href="/h-tools/assets/index-Cvfn73sF.css">
+    <title>工具箱 🧰</title>
+    <script type="module" crossorigin src="/h-tools/assets/index-CK9urb8D.js"></script>
+    <link rel="stylesheet" crossorigin href="/h-tools/assets/index-DsF-uipL.css">
   </head>
   <body>
     <div id="app"></div>

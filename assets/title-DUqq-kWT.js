@@ -1,1 +1,0 @@
-import{_ as t}from"./index-D4QfcvDj.js";const o={},c={class:"text-2xl mb-6 text-[#5C8374]"};function r(e,s){return Vue.openBlock(),Vue.createElementBlock("div",c,[Vue.renderSlot(e.$slots,"default")])}const _=t(o,[["render",r]]);export{_ as T};
