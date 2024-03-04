@@ -8,7 +8,7 @@ const value = ref('');
 </script>
 
 <template>
-  <Title>Scss 转 CSS</Title>
+  <Title />
   <!-- <iframe src="https://www.sassmeister.com/" class="w-full h-full rounded-xl overflow-hidden shadow-2xl border max-w-[1440px]"></iframe> -->
 
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4">

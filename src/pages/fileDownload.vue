@@ -4,7 +4,7 @@ import isValidVariableName from '@/utils/isValidVariableName.ts'
 import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64String from '@/utils/isBase64String.ts'
 import { get } from 'lodash-es';
-import CodeEditor, { CodeEditorFun } from '@/components/code-editor/index.vue';
+import CodeEditor from '@/components/code-editor/index.vue';
 import Title from '@/components/title.vue';
 
 const DEFAULT_EDITRO_VALUE = `[

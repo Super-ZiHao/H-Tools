@@ -9,7 +9,7 @@ const imgInfoArr = reactive<ImgInfoType[]>([]);
 </script>
 
 <template>
-  <Title>在线转 base64（图片）</Title>
+  <Title />
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4 overflow-hidden">
     <!-- 上传图片 -->
     <Draggable v-model="imgInfoArr" />

@@ -1,12 +1,11 @@
 <script lang='ts' setup>
+import { useRoute } from 'vue-router';
+const route = useRoute()
+
 </script>
 
 <template>
   <div class="text-2xl mb-6 text-[#5C8374]">
-    <slot></slot>
+    {{ route.meta.title }}
   </div>
 </template>
-
-<style lang='scss' scoped>
-
-</style>

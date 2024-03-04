@@ -11,9 +11,9 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   plugins: [
     vue(),
-    // (monacoEditorPlugin as any).default({
-    //   languageWorkers: ['css', 'json'],
-    // }),
+    (monacoEditorPlugin as any).default({
+      languageWorkers: ['css', 'json'],
+    }),
     visualizer({ open: true }), // 打包产物明细
     AutoImport({
       resolvers: [ElementPlusResolver()],
