@@ -10,8 +10,12 @@ const props = withDefaults(defineProps<{
   language: 'json' | 'scss' | 'less' | 'css',
   /** 当前值 */
   value?: string,
+  /** 初始值 */
+  defaultValue?: string,
   /** 只读 */
   readonly?: boolean,
+  /** 错误 */
+  error?: boolean;
 }>(), {
   readonly: false,
 })
@@ -25,7 +29,7 @@ const { monacoEditorRef, createEditor, monacoEditor, updateVal, formatDoc } = us
 onMounted(() => {
   if (!monacoEditorRef.value) return;
   // 初始化编辑器
-  createEditor();
+  createEditor(props.defaultValue);
 
   // 监测更新
   const didChangeModelContent = monacoEditor.value?.onDidChangeModelContent(() => {
@@ -37,10 +41,10 @@ onMounted(() => {
     didChangeModelContent?.dispose();
   })
 })
+// 监听外部值变化
 watch(() => props.value, (newVal) => {
   updateVal(newVal ?? '');
 })
-
 
 // 格式化代码
 const formatCode = () => {
@@ -63,7 +67,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="border-[2px] w-full border-cyan-400 flex-1 rounded-md overflow-auto" ref="monacoEditorRef">
+  <div :class="`border-[2px] w-full ${props.error ? 'border-red-400' : 'border-cyan-400'} flex-1 rounded-md overflow-auto`" ref="monacoEditorRef">
   </div>
 </template>
 

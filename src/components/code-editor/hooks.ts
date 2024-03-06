@@ -10,11 +10,11 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
   const monacoEditorRef = ref<HTMLElement | null>(null)
 
   /** 创建实例初始化 */
-  function createEditor() {
+  function createEditor(defaultValue: string = '') {
     if(!monacoEditorRef.value) return
     monacoEditor.value = editor.create(monacoEditorRef.value, {
       // 初始模型
-      model: editor.createModel(editorOption.value ?? '', editorOption.language),
+      model: editor.createModel(editorOption.value ?? defaultValue, editorOption.language),
       // 是否启用预览图
       minimap: { enabled: true },
       // 主键
@@ -70,7 +70,7 @@ function useMonacoEditor(editorOption: editor.IStandaloneEditorConstructionOptio
 
   // 配置更新
   function updateOptions(opt: editor.IStandaloneEditorConstructionOptions) {
-    monacoEditor.value?.updateOptions(opt)
+    toRaw(monacoEditor.value)?.updateOptions(opt)
   }
 
   // 获取配置
