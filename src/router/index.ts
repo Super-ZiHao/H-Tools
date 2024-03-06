@@ -32,7 +32,7 @@ export const toolsRouter: RouteRecordRaw[] = [
     meta: {
       title: '转 css'
     },
-    component: () => import('@/pages/scssToCss/index.vue'),
+    component: () => import('@/pages/toCss/index.vue'),
   }
 ]
 
@@ -54,7 +54,6 @@ let loading: any;
 router.beforeEach((_to, _from, next) => {
   loading = ElLoading.service({
     lock: true,
-    text: 'Loading',
     background: 'rgba(0, 0, 0, 0.7)',
   })
   next()

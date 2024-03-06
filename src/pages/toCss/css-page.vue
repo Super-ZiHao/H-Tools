@@ -5,6 +5,8 @@ import { compileString } from 'sass';
 import { render } from 'less';
 import { Mode } from './type';
 
+const ERROR_STR = '编译出现错误'
+
 const props = defineProps<{
   value: string
   // 当前转换语言
@@ -13,6 +15,7 @@ const props = defineProps<{
 
 const code = ref('');
 
+const handlerError = () => code.value = ERROR_STR;
 const handlerChange = (newValue: string) => {
   try {
     switch (props.currentLanguage) {
@@ -24,12 +27,12 @@ const handlerChange = (newValue: string) => {
       case Mode.LESS: {
         render(newValue).then(res => {
           code.value = res.css;
-        })
+        }).catch(handlerError)
         break;
       }
     }
   } catch (error) {
-    code.value = '出现错误～'
+    handlerError()
   }
   
 }
@@ -39,7 +42,7 @@ watch(() => props.currentLanguage, () => handlerChange(props.value))
 </script>
 
 <template>
-  <CodeEditor :error="code === 'error'" language="css" :value="code" :readonly="true" />
+  <CodeEditor :error="code === ERROR_STR" language="css" :value="code" :readonly="true" />
 </template>
 
 <style lang='scss' scoped>

@@ -15,7 +15,7 @@ const mode = ref<Mode>(Mode.SCSS)
     <!-- scss 编辑器 -->
     <div class="flex-1 h-full flex items-center flex-col gap-4 relative">
       <div class="absolute z-10 left-2 bottom-2">
-        <ElDropdown>
+        <ElDropdown placement="top">
           <ElTag type="primary" effect="dark">{{ mode.toLocaleUpperCase() }}</ElTag>
           <template #dropdown>
             <ElDropdownMenu>
