@@ -5,7 +5,6 @@ import downloadImgs from '@/utils/downloadImgs.ts'
 import isBase64String from '@/utils/isBase64String.ts'
 import { get } from 'lodash-es';
 import CodeEditor from '@/components/code-editor/index.vue';
-import Title from '@/components/title.vue';
 
 const DEFAULT_EDITRO_VALUE = `[
   
@@ -66,7 +65,6 @@ const CodeEditorRef = ref<InstanceType<typeof CodeEditor>>();
 </script>
 
 <template>
-  <Title>文件下载（base64、url）</Title>
   <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex items-start flex-col gap-4">
     <div class="relative w-full flex justify-between items-center h-8">
       <div class="flex items-center gap-4">

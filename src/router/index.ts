@@ -19,8 +19,16 @@ export const toolsRouter: RouteRecordRaw[] = [
     component: () => import('@/pages/fileDownload.vue'),
   },
   {
+    path: '/color',
+    name: 'TO-COLOR',
+    meta: {
+      title: '颜色转换'
+    },
+    component: () => import('@/pages/color/index.vue'),
+  },
+  {
     path: '/to-base64',
-    name: 'to-base64',
+    name: 'TO-BASE64',
     meta: {
       title: '转 base64（图片）'
     },
@@ -28,7 +36,7 @@ export const toolsRouter: RouteRecordRaw[] = [
   },
   {
     path: '/to-css',
-    name: 'to-css',
+    name: 'TO-CSS',
     meta: {
       title: '转 css'
     },
