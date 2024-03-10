@@ -1,11 +1,11 @@
 <script lang='ts' setup>
-import ColorCard from './components/ColorCard.vue';
+import ColorLayoutCard from './components/ColorLayoutCard.vue';
 </script>
 
 <template>
-  <ColorCard title="信息">
+  <ColorLayoutCard title="预留模块（暂无想法）">
     
-  </ColorCard>
+  </ColorLayoutCard>
 </template>
 
 <style lang='scss' scoped>

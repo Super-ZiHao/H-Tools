@@ -1,36 +1,39 @@
 <!-- 饱和度亮度板 - 控件 -->
 <script lang='ts' setup>
-import { ref, defineProps, computed } from 'vue';
+import { ref, defineProps } from 'vue';
 import useColorsStore from '../hook/useColorsStore';
+import { storeToRefs } from 'pinia';
 
 defineProps<{
   sizeString: string;
   pieSizeString: string;
 }>()
 
-const { sv, hsl } = useColorsStore();
+const { sv, hue } = storeToRefs(useColorsStore());
+const { updateColor } = useColorsStore()
 const squareRef = ref<HTMLDivElement>();
-const dragBtnPosition = computed(() => {
-  return ({ left: `${sv.s}%`, top: `${(100 - sv.v)}%` })
-})
 const handlerChangeOffset = (e: MouseEvent) => {
+  e.stopPropagation()
+  e.preventDefault()
   if (!squareRef.value) return
   const {left, top, right, bottom, width, height } = squareRef.value.getBoundingClientRect();
+  let s = sv.value.s, v = sv.value.v
   const { clientX, clientY } = e;
   if (clientX >= left && clientX <= right) {
-    sv.s = (clientX - left) / width * 100;
+    s = (clientX - left) / width * 100;
   } else if (clientX > right) {
-    sv.s = 100;
+    s = 100;
   } else {
-    sv.s = 0;
+    s = 0;
   }
   if (clientY >= top && clientY <= bottom) {
-    sv.v = (1 - (clientY - top) / height) * 100;
+    v = (1 - ((clientY - top) / height)) * 100;
   } else if (clientY > bottom) {
-    sv.v = 0;
+    v = 0;
   } else {
-    sv.v = 100;
+    v = 100;
   }
+  updateColor({ sv: { s, v } }, true)
 }
 
 const handlerSquareDown = (e: MouseEvent) => {
@@ -48,13 +51,13 @@ const handlerSquareDown = (e: MouseEvent) => {
 <template>
   <div
     class="square-chart cursor-pointer absolute z-10 rounded-xl overflow-hidden"
-    :style="`background-color: hsl(${hsl.h}, 100%, 50%);`"
+    :style="`background-color: hsl(${hue}, 100%, 50%);`"
     @mousedown="handlerSquareDown"
     ref="squareRef"
   >
     <div
       class="square-drag-btn pointer-events-none absolute translate-x-[-8px] translate-y-[-8px] w-4 h-4 rounded-full z-10"
-      :style="{left: dragBtnPosition.left, top: dragBtnPosition.top}"
+      :style="{ left: `${sv.s}%`, top: `${(100 - sv.v)}%` }"
     ></div>
   </div>
 </template>

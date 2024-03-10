@@ -4,6 +4,6 @@ import router from '@/router';
 import { createPinia } from 'pinia';
 import './style/tailwind.css'
 createApp(App)
-.use(router)
-.use(createPinia())
-.mount('#app')
+  .use(router)
+  .use(createPinia())
+  .mount('#app')

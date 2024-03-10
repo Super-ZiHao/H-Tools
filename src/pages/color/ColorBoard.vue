@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import ColorCard from './components/ColorCard.vue';
+import ColorLayoutCard from './components/ColorLayoutCard.vue';
 import BrightnessControl from './components/BrightnessControl.vue';
 import ToneControl from './components/ToneControl.vue';
 import OpacityControl from './components/OpacityControl.vue';
@@ -12,7 +12,7 @@ const PIE_SIZE = '10px';
 </script>
 
 <template>
-  <ColorCard title="十六进制颜色选择器">
+  <ColorLayoutCard title="颜色选择器">
     <div class="flex flex-col gap-1">
       <div class="relative aspect-square flex-shrink-0" style="width: 340px; height: 340px;">
         <!-- 饱和度亮度板 -->
@@ -25,7 +25,7 @@ const PIE_SIZE = '10px';
     </div>
     <!-- 输入控件 -->
     <InputColoControl />
-  </ColorCard>
+  </ColorLayoutCard>
 </template>
 
 <style lang='scss' scoped>
