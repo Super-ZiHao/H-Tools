@@ -20,7 +20,7 @@ export const toolsRouter: RouteRecordRaw[] = [
   },
   {
     path: '/color',
-    name: 'TO-COLOR',
+    name: 'COLOR',
     meta: {
       title: '颜色转换'
     },

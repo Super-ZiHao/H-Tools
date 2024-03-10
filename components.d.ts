@@ -19,6 +19,8 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSlider: typeof import('element-plus/es')['ElSlider']
+    ElSliderlider: typeof import('element-plus/es')['ElSliderlider']
     ElTag: typeof import('element-plus/es')['ElTag']
     Header: typeof import('./src/components/header.vue')['default']
     Main: typeof import('./src/components/main.vue')['default']

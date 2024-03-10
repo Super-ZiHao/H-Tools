@@ -1,29 +1,34 @@
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
 
 /** 颜色核心 */
 const useColorsStore = defineStore('color', () => {
-  /** hsb 格式 */
-  const hsl = reactive({
-    h: 0,
-    s: 1,
-    l: .5,
+
+  /** sv */ 
+  const hue = ref(0);
+  const sv = reactive({
+    s: 100,
+    v: 100,
   })
-
+  /** hsb 格式 */
+  const sl = reactive({
+    s: 100,
+    l: 50,
+  })
   /** 透明度 */
-  const alpha = ref(1);
+  const opacity = ref(100);
 
-  const changeHSL = ({h, s, l}: {h?: number, s?: number, l?: number}) => {
-    (h || h === 0) && (hsl.h = h);
-    (s || s === 0) && (hsl.s = s);
-    (l || l === 0) && (hsl.l = l);
-  }
-  const changeAlpha = (value: number) => (alpha.value = value);
+  const hsv = computed(() => ({ h: hue.value, s: sv.s, v: sv.v }));
+  const hsl = computed(() => ({ h: hue.value, s: sl.s, l: sl.l }));
+  const hslString = computed(() => `hsla(${hsl.value.h}, ${hsl.value.s}%, ${hsl.value.l}%, ${opacity.value / 100})`);
   return {
+    hsv,
     hsl,
-    alpha,
-    changeHSL,
-    changeAlpha
+    sl,
+    sv,
+    hue,
+    opacity,
+    hslString,
   }
 });
 
