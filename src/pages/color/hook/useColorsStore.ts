@@ -38,8 +38,8 @@ const useColorsStore = defineStore('color', () => {
   })
   /** 透明度 */
   const opacity = ref(100);
-  const hsv = computed(() => ({ h: hue.value, s: sv.s, v: sv.v }));
-  const hsl = computed(() => ({ h: hue.value, s: sl.s, l: sl.l }));
+  const hsv = computed(() => ({ h: hue.value, s: sv.s / 100, v: sv.v / 100 }));
+  const hsl = computed(() => ({ h: hue.value, s: sl.s / 100, l: sl.l / 100 }));
   const hslString = computed(() => `hsla(${hue.value}, ${sl.s}%, ${sl.l}%, ${opacity.value}%)`);
 
   const change = (color: tinycolor2.Instance, updateArr: ColorTypeEnum[]) => {

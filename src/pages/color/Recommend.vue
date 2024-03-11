@@ -5,19 +5,33 @@ import ColorLayoutCard from './components/ColorLayoutCard.vue';
 import useColorsStore from './hook/useColorsStore';
 import { storeToRefs } from 'pinia';
 import ColorCard from './components/ColorCard.vue';
-
-
+import { divideAngle } from './utils';
 
 const name = ref('0');
 const { hsv, opacity } = storeToRefs(useColorsStore())
 const color = computed(() => {
   const color = tinycolor2({...hsv.value, a: opacity.value / 100 });
-
-  // 获取互补色
-  const complementary = color.complement().toRgb();
+  const [, h_120, h_240] = divideAngle(hsv.value.h, 3);
+  const [, h_90, h_180, h_270] = divideAngle(hsv.value.h, 4);
   
+  // 互补组合
+  const color_0 = color.toRgb();
+
+  // 三色组合
+  const color_120 = tinycolor2({ h: h_120, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+  const color_240 = tinycolor2({ h: h_240, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+
+  // 四色组合
+  const color_90 = tinycolor2({ h: h_90, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+  const color_180 = tinycolor2({ h: h_180, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+  const color_270 = tinycolor2({ h: h_270, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
   return {
-    complementary,
+    color_0,
+    color_120,
+    color_240,
+    color_90,
+    color_180,
+    color_270
   }
 })
 
@@ -26,19 +40,20 @@ const color = computed(() => {
 <template>
   <ColorLayoutCard>
     <ElTabs type="border-card" v-model="name">
-      <ElTabPane label="互补色" name="0">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.02]" :color="color.complementary" />
+      <ElTabPane class="flex gap-3" label="互补色" name="0">
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" :color="color.color_0" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" :color="color.color_180" />
       </ElTabPane>
       <ElTabPane class="flex gap-3" label="三色" name="1">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.04]" />
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.04]" />
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.04]" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="color.color_0" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="color.color_120" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="color.color_240" />
       </ElTabPane>
       <ElTabPane class="grid grid-cols-2 gap-3" label="四色" name="2">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" />
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" />
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" />
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="color.color_0" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="color.color_90" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="color.color_180" />
+        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="color.color_270" />
       </ElTabPane>
     </ElTabs>
   </ColorLayoutCard>

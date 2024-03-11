@@ -2,12 +2,19 @@
 import { computed, defineProps } from 'vue';
 import tinycolor2 from 'tinycolor2';
 import useColorsStore from '../hook/useColorsStore';
+import { divideAngle } from '../utils'
 const props = defineProps<{
   color?: { r: number; g: number; b: number; a: number };
 }>()
 
 const { updateColor, updateOpacity } = useColorsStore();
-const backgroundColor = computed(() => tinycolor2(props.color).toRgbString());
+const backgroundColor = computed(() => {
+  const color = tinycolor2(props.color);
+  if (props.color?.a === 1) {
+    return color.toHexString();
+  }
+  return color.toHex8String();
+});
 
 const handlerClick = () => {
   updateColor({ rgb: props.color }, true);
@@ -17,7 +24,9 @@ const handlerClick = () => {
 </script>
 
 <template>
-  <div class="color-card cursor-pointer transition-transform" @click="handlerClick" v-bind="$attrs" v-if="!!color"></div>
+  <div class="color-card cursor-pointer transition-transform" @click="handlerClick" v-bind="$attrs" v-if="!!color">
+    <div class="hex-string absolute inset-0 z-10 flex items-center justify-center text-white mix-blend-difference">{{ backgroundColor }}</div>
+  </div>
   <div class="bg-white" v-else></div>
 </template>
 
@@ -40,6 +49,10 @@ $grid-2: transparent;
     position: absolute;
     inset: 0;
     background-color: v-bind(backgroundColor);
+  }
+
+  .hex-string {
+    position: absolute;
   }
 }
 </style>

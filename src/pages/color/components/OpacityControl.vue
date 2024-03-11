@@ -3,13 +3,13 @@
 import { storeToRefs } from 'pinia';
 import useColorsStore from '../hook/useColorsStore';
 
-const { opacity, hsl } = storeToRefs(useColorsStore());
+const { opacity, hue } = storeToRefs(useColorsStore());
 
 </script>
 
 <template>
   <div class="flex items-center px-14">
-    <ElSlider v-model="opacity" height="200px" :style="`--background-color: hsl(${hsl.h}, 100%, 50%)`" />
+    <ElSlider v-model="opacity" height="200px" :style="`--background-color: hsl(${hue}, 100%, 50%)`" />
   </div>
 </template>
 

@@ -21,8 +21,8 @@ const useHistoryColor = defineStore(HISTORY_COLOR_KEY, () => {
   })
   const historyColor = ref<ColorFormats.RGBA[]>([])
   const saveHistoryColor = (color: ColorFormats.RGBA) => {
-    const uniqHistory = uniqWith([color, ...historyColor.value], (v1: any, v2: any) => {
-      return v1.r === v2.r && v1.g === v2.g && v1.b === v2.b
+    const uniqHistory = uniqWith([color, ...historyColor.value], (v1: ColorFormats.RGBA, v2: ColorFormats.RGBA) => {
+      return v1.r === v2.r && v1.g === v2.g && v1.b === v2.b && v1.a === v2.a
     }).filter((_i, idx) => idx <= MAX_LENGTH);
     historyColor.value = uniqHistory
     localStorage.setItem(HISTORY_COLOR_KEY, JSON.stringify(uniqHistory));
