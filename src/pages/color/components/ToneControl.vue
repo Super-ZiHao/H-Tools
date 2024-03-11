@@ -1,8 +1,9 @@
 <!-- 色调环 - 控件 -->
 <script lang='ts' setup>
-import { defineProps, withDefaults, ref, computed } from 'vue';
+import { defineProps, withDefaults, ref } from 'vue';
 import useColorsStore from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
+import { getAngle } from '../utils'
 
 const startAngle = 0; // 开始的角度
 const props = withDefaults(defineProps<{
@@ -16,13 +17,13 @@ const { hue } = storeToRefs(useColorsStore());
 const { updateColor } = useColorsStore();
 const pieRef = ref<HTMLDivElement>()
 
-const pieDargPosition = computed(() => {
+const getPieDargPosition = (currentAngle: number) => {
   if (!pieRef.value) return;
   const { width } = pieRef.value.getBoundingClientRect();
   const radius = (width - props.borderSize) / 2; // 圆半径
   const startRadians = getRadians(startAngle);
   // 将起始角度和当前角度转换为弧度
-  const currentRadians = getRadians(hue.value)
+  const currentRadians = getRadians(getAngle(currentAngle))
   // 计算滑块移动的角度差
   const angleDifference = currentRadians - startRadians;
   // 计算滑块在x轴和y轴的位置
@@ -32,7 +33,7 @@ const pieDargPosition = computed(() => {
     left: `${x}px`,
     top: `${y}px`,
   }
-})
+}
 
 const getRadians = (angle: number) => (angle * (Math.PI / 180));
 
@@ -73,9 +74,17 @@ const down = (e: MouseEvent) => {
 <div class="pie-chart shadow-md" @mousedown="down" ref="pieRef">
   <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
   <div
-    class="pie-drag-btn hover:scale-[1.15] transition-transform shadow-md bg-white border-2 cursor-pointer absolute rounded-full z-10"
-    :style="{...pieDargPosition}"
+    class="pie-drag-btn scale-[1.15] transition-transform shadow-md bg-transparent border-[8px] border-gray-900 cursor-pointer absolute rounded-full z-10"
+    :style="{...getPieDargPosition(hue)}"
   ></div>
+
+  <!-- <div
+    class="pie-drag-btn hover:scale-[1.15] transition-transform shadow-md bg-white border-2 cursor-pointer absolute rounded-full z-10"
+    :style="{...getPieDargPosition(getAngle(hue > 180 ? hue - 180 : 180 + hue))}"
+    @mousedown="(e) => {
+      e.stopPropagation();
+    }"
+  ></div> -->
 </div>
 </template>
 

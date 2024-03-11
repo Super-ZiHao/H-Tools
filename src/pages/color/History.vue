@@ -9,7 +9,7 @@ const { historyColor } = storeToRefs(useHistoryColor());
 </script>
 
 <template>
-  <ColorLayoutCard title="历史保存">
+  <ColorLayoutCard title="历史保存" sub-title="最多保存 20 种颜色">
     <div class="card-container p-4 gap-4">
       <ColorCard class="w-full hover:scale-110 aspect-square rounded-md" v-for="item in historyColor" :color="item" :key="String(item)" />
     </div>
