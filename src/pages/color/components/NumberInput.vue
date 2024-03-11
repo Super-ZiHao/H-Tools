@@ -5,7 +5,7 @@ const emits = defineEmits<{
   change: [value: number]
 }>();
 
-const model = defineModel();
+const model = defineModel<number>();
 
 defineProps<{
   title: string
@@ -22,7 +22,7 @@ defineProps<{
       :min="0"
       maxlength="2"
       v-bind="$attrs"
-      @input="(e: string) => emits('change', Number(e))"
+      @input="(e) => emits('change', Number(e ?? '0'))"
     />
   </div>
 </template>
