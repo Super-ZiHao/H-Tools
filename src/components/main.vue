@@ -4,7 +4,10 @@ const route = useRoute()
 </script>
 
 <template>
-  <main class="relative min-w-[960px] h-[calc(100vh-4rem)] lg:p-14 p-8 flex items-center justify-center flex-col">
+  <main
+    class="relative min-w-[960px] min-h-[100vh] box-border pt-24 pb-8 px-8 overflow-auto flex items-center justify-center flex-col"
+    :style="{ backgroundColor: (route.meta as any).bgColor ?? '' }"
+  >
     <slot name="default"></slot>
   </main>
 </template>

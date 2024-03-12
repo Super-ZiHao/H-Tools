@@ -6,7 +6,7 @@ import Recommend from './Recommend.vue'
 </script>
 
 <template>
-	<div class="color-container grid gap-4 w-full h-full max-w-[1280px] rounded-2xl">
+	<div class="color-container grid gap-4 w-full h-full flex-1 max-w-[1280px] rounded-2xl">
     <ColorBoard class="color-board shadow-md" />
     <Info class="color-info shadow-md" />
     <History class="color-history shadow-md" />
@@ -18,10 +18,10 @@ import Recommend from './Recommend.vue'
 .color-container {
   grid-template-columns: 340px 100px 140px 100px 1fr 1fr;
   grid-template-rows: 330px 100px 72px 1fr;
-  grid-template-areas: "board board board info info info"
-                        "board board board info info info"
-                        "recommend recommend history history history history"
-                        "recommend recommend history history history history"
+  grid-template-areas: "board board board history history history"
+                        "board board board history history history"
+                        "recommend recommend info info info info"
+                        "recommend recommend info info info info"
 }
 
 .color-board { // 调色板

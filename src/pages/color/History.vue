@@ -10,11 +10,14 @@ const { historyColor } = storeToRefs(useHistoryColor());
 
 <template>
   <ColorLayoutCard title="历史保存" sub-title="最多保存 20 种颜色">
-    <div class="w-full h-fit flex flex-wrap p-4 gap-4">
-      <ColorCard class="w-24 h-24 hover:scale-110 aspect-square rounded-md" v-for="item in historyColor" :color="item" :key="String(item)" />
+    <div class="grid-container grid w-full h-fit p-4 gap-4">
+      <ColorCard class="w-full h-full aspect-square rounded-md" v-for="item in historyColor" :color="item" :key="String(item)" />
     </div>
   </ColorLayoutCard>
 </template>
 
 <style lang='scss' scoped>
+.grid-container {
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
 </style>

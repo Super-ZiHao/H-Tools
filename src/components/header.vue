@@ -7,7 +7,10 @@ const route = useRoute();
 </script>
 
 <template>
-  <header class="flex items-center justify-between min-w-[800px] shadow-lg py-4 lg:px-12 px-4 h-16 sticky top-0 z-20 bg-white">
+  <header
+    class="fixed top-0 left-0 z-20 flex items-center justify-between w-full min-w-[800px] backdrop-filter shadow-lg shadow-gray-400 py-4 lg:px-12 px-4 h-16 "
+    :style="{ backdropFilter: 'blur(4px)', backgroundColor: 'rgba(255, 255, 255, 0.7)'}"
+  >
     <div class="flex items-center">
       <img class="h-14" src="../../public/logo.png" style="margin: -12px; filter: invert(1);" />
       <div class="text-lg">Tools</div>

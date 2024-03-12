@@ -38,7 +38,7 @@ const getPieDargPosition = (currentAngle: number) => {
 }
 
 
-const change = (e: MouseEvent)=>{
+const change = (e: MouseEvent) => {
   e.stopPropagation()
   e.preventDefault()
   if (!pieRef.value) return;
@@ -46,7 +46,7 @@ const change = (e: MouseEvent)=>{
   const { left, top, width } = pieRef.value.getBoundingClientRect();
   const centerX = left + (width / 2); // 圆心 X 坐标
   const centerY = top + (width / 2); // 圆心 Y 坐标
-    // 计算鼠标坐标相对于圆心的坐标
+  // 计算鼠标坐标相对于圆心的坐标
   const relativeX = clientX - centerX;
   const relativeY = clientY - centerY;
   // 获取弧度
@@ -75,43 +75,53 @@ const down = (e: MouseEvent) => {
 /** 推荐颜色逻辑 */
 const hueRecommend = computed(() => divideAngle(hue.value, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
 
+
+enum SV_TYPE_ENUM {
+  L = 'hsl',
+  V = 'hsv',
+}
+const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
+
 </script>
 
 <template>
-<div class="pie-chart shadow-md" @mousedown="down" ref="pieRef">
-  <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
-  <div
-    class="pie-drag-btn flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-    :style="{...getPieDargPosition(hue), '--hue': hue}"
-  >
-    <ElIcon><Mouse /></ElIcon>
-  </div>
-
-
-  <ElTooltip
-    :content="String(Math.round(item))"
-    placement="top"
-    v-for="item in hueRecommend"
-    :key="item"
-  >
+  <div class="pie-chart" @mousedown="down" ref="pieRef">
+    <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
     <div
-      class="pie-drag-btn preview flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-      :style="{...getPieDargPosition(item)}"
-      @mousedown="(e) => {e.stopPropagation()}"
-      @click="() => copyColor(String(item))"
-    >
-      <ElIcon><CopyDocument /></ElIcon>
+      class="pie-drag-btn flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
+      :style="{ ...getPieDargPosition(hue), '--hue': hue }">
+      <ElIcon>
+        <Mouse />
+      </ElIcon>
     </div>
-  </ElTooltip>
 
+    <ElTooltip :content="`Hue: ${String(Math.round(item))}`" placement="top" v-for="item in hueRecommend" :key="item">
+      <div
+        class="pie-drag-btn preview flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
+        :style="{ ...getPieDargPosition(item) }" @mousedown="(e) => { e.stopPropagation() }"
+        @click="() => copyColor(String(item))">
+        <ElIcon>
+          <CopyDocument />
+        </ElIcon>
+      </div>
+    </ElTooltip>
 
-</div>
+    <div
+      :class="`btn-l ${SVType === SV_TYPE_ENUM.V ? 'active' : ''} select-none transition-all absolute left-0 top-0 text-white w-11 h-11 flex items-center justify-center rounded-full cursor-pointer`"
+      @mousedown="(e) => e.stopPropagation()"
+    >V</div>
+    <div
+      :class="`btn-l ${SVType === SV_TYPE_ENUM.L ? 'active' : ''} select-none transition-all absolute right-0 top-0 text-white w-11 h-11 flex items-center justify-center rounded-full cursor-pointer`"
+      @mousedown="(e) => e.stopPropagation()"
+    >L</div>
+  </div>
 </template>
 
 <style lang='scss' scoped>
 $size: v-bind(sizeString);
 $borderSize: calc($size / 2);
 $pieSize: v-bind(pieSizeString);
+
 /* 圆盘 */
 .pie-chart {
   --red: #ff0000;
@@ -121,20 +131,19 @@ $pieSize: v-bind(pieSizeString);
   position: absolute;
   inset: $pieSize;
   border-radius: 50%;
-  background: conic-gradient(
-    hsl(270, 100%, 50%),
-    hsl(300, 100%, 50%),
-    hsl(330, 100%, 50%),
-    hsl(0, 100%, 50%),
-    hsl(30, 100%, 50%),
-    hsl(60, 100%, 50%),
-    hsl(90, 100%, 50%),
-    hsl(120, 100%, 50%),
-    hsl(150, 100%, 50%),
-    hsl(180, 100%, 50%),
-    hsl(210, 100%, 50%),
-    hsl(240, 100%, 50%),
-    hsl(270, 100%, 50%),
+  background: conic-gradient(hsl(270, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(330, 100%, 50%),
+      hsl(0, 100%, 50%),
+      hsl(30, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(90, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(150, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(210, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(270, 100%, 50%),
     );
 
   .pie-chart-mask {
@@ -151,22 +160,37 @@ $pieSize: v-bind(pieSizeString);
   .pie-drag-btn {
     width: $borderSize;
     height: $borderSize;
-    box-shadow: inset 5px 5px 10px #1f2123,inset -5px -5px 10px #7d858b;
+    box-shadow: inset 5px 5px 10px #1f2123, inset -5px -5px 10px #7d858b;
     color: white;
     mix-blend-mode: difference;
 
     &.preview {
-      box-shadow: inset 5px 5px 10px #666666,inset -5px -5px 10px #ffffff;
+      box-shadow: inset 5px 5px 10px #666666, inset -5px -5px 10px #ffffff;
       color: white;
       mix-blend-mode: difference;
 
       &:hover ::v-deep(.el-icon) {
         opacity: 1;
       }
+
       ::v-deep(.el-icon) {
         opacity: 0;
         transition: opacity;
       }
+    }
+  }
+
+
+  .btn-l {
+    background: linear-gradient(145deg, #53595d, #464b4e);
+    box-shadow: 5px 5px 5px #1f2123,
+      -5px -5px 5px #7d858b;
+
+    &:active,
+    &.active {
+      background: #4e5357;
+      box-shadow: inset 9px 9px 18px #1f2123,
+        inset -9px -9px 18px #7d858b;
     }
   }
 }

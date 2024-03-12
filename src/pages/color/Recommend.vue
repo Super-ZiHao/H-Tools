@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import ColorCard from './components/ColorCard.vue';
 import { Hide } from '@element-plus/icons-vue';
 import { ElLink } from 'element-plus';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { divideAngle } from './utils';
 
 
@@ -13,19 +13,22 @@ const { colorRecommendNumber, sv, alpha, hue } = storeToRefs(useColorsStore())
 
 const hueRecommend = computed(() => divideAngle(hue.value, colorRecommendNumber.value))
 
+watch(alpha, (v) => {
+  console.log(v);
+})
 </script>
 
 <template>
   <ColorLayoutCard>
     <ElTabs type="border-card" v-model="colorRecommendNumber">
       <ElTabPane class="flex gap-3" label="互补色" :name="ColorRecommendTypeEnum.Complementary">
-        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha / 100 }" :key="h" />
       </ElTabPane>
       <ElTabPane class="flex gap-3" label="三色" :name="ColorRecommendTypeEnum.Triadic">
-        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.04]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.04]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha / 100 }" :key="h" />
       </ElTabPane>
       <ElTabPane class="grid grid-cols-2 gap-3" label="四色" :name="ColorRecommendTypeEnum.Tetradic">
-        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.06]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.06]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha / 100 }" :key="h" />
       </ElTabPane>
     </ElTabs>
     <ElLink

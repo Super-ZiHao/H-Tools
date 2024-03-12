@@ -1,6 +1,11 @@
 // router/index.js
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 
+export interface RouterMetaType {
+  bgColor?: string;
+  headerBgColor?: string;
+}
+
 export const toolsRouter: RouteRecordRaw[] = [
   {
     path: '/sprite',
@@ -16,6 +21,10 @@ export const toolsRouter: RouteRecordRaw[] = [
     path: '/color',
     name: 'COLOR',
     component: () => import('@/pages/color/index.vue'),
+    meta: {
+      bgColor: '#343434',
+      // headerBgColor: '#343434'
+    }
   },
   {
     path: '/to-base64',
