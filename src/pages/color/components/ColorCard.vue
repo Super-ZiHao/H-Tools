@@ -1,10 +1,10 @@
 <script lang='ts' setup>
 import { computed, defineProps } from 'vue';
-import tinycolor2 from 'tinycolor2';
+import tinycolor2, { ColorFormats } from 'tinycolor2';
 import useColorsStore from '../hook/useColorsStore';
-import { divideAngle } from '../utils'
+
 const props = defineProps<{
-  color?: { r: number; g: number; b: number; a: number };
+  color?: ColorFormats.HSLA | ColorFormats.HSVA | ColorFormats.RGBA
 }>()
 
 const { updateColor, updateOpacity } = useColorsStore();
@@ -17,7 +17,21 @@ const backgroundColor = computed(() => {
 });
 
 const handlerClick = () => {
-  updateColor({ rgb: props.color }, true);
+  const colorType = tinycolor2(props.color).getFormat();
+  switch (colorType) {
+    case 'rgb':
+      // @ts-ignore
+      updateColor({ rgb: props.color }, true);
+      break;
+    case 'hsl':
+      // @ts-ignore
+      updateColor({ hsl: props.color }, true);
+      break;
+    case 'hsv':
+      // @ts-ignore
+      updateColor({ hsv: props.color }, true);
+      break;
+  }
   updateOpacity((props.color?.a ?? 1) * 100);
 }
 

@@ -13,7 +13,7 @@ defineProps<{
       <div class="pl-8 text-white text-xl">{{ title }}</div>
       <div class="pr-8 text-sm text-gray-400">{{ subTitle }}</div>
     </div>
-    <div class="w-full h-0 flex-1 relative bg-[#4d5358] flex gap-4">
+    <div class="w-full h-0 flex-1 relative bg-[#4d5358] flex gap-4 overflow-auto">
       <slot></slot>
     </div>
   </div>

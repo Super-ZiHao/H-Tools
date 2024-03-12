@@ -1,9 +1,11 @@
 <!-- 色调环 - 控件 -->
 <script lang='ts' setup>
-import { defineProps, withDefaults, ref } from 'vue';
-import useColorsStore from '../hook/useColorsStore';
+import { defineProps, withDefaults, ref, computed } from 'vue';
+import useColorsStore, { ColorRecommendTypeEnum } from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
 import { getAngle } from '../utils'
+import tinycolor from 'tinycolor2';
+import { CopyDocument, Mouse } from '@element-plus/icons-vue';
 
 const startAngle = 0; // 开始的角度
 const props = withDefaults(defineProps<{
@@ -13,7 +15,7 @@ const props = withDefaults(defineProps<{
 }>(), {
 
 });
-const { hue } = storeToRefs(useColorsStore());
+const { hue, colorRecommend, colorRecommendType } = storeToRefs(useColorsStore());
 const { updateColor } = useColorsStore();
 const pieRef = ref<HTMLDivElement>()
 
@@ -68,23 +70,73 @@ const down = (e: MouseEvent) => {
   document.body.addEventListener('mousemove', change)
   document.body.addEventListener('mouseup', up)
 }
+
+
+/** 推荐颜色逻辑 */
+const recommendColorArray = computed(() => {
+  const arr: any[] = [];
+
+
+  const allArr = Object.keys(colorRecommend.value).map(item => ({
+    name: item,
+    // @ts-ignore
+    hue: tinycolor(colorRecommend.value[item]).toHsl().h,
+  }))
+
+  switch (colorRecommendType.value) {
+    case ColorRecommendTypeEnum.Complementary: {
+      arr.push(allArr.find(item => item.name === 'color_180') ?? {})
+      break;
+    }
+    case ColorRecommendTypeEnum.Triadic: {
+      arr.push(allArr.find(item => item.name === 'color_120') ?? {})
+      arr.push(allArr.find(item => item.name === 'color_240') ?? {})
+      break;
+    }
+    case ColorRecommendTypeEnum.Tetradic: {
+      arr.push(allArr.find(item => item.name === 'color_90') ?? {})
+      arr.push(allArr.find(item => item.name === 'color_180') ?? {})
+      arr.push(allArr.find(item => item.name === 'color_270') ?? {})
+      break;
+    }
+    case ColorRecommendTypeEnum.NULL: {
+      arr.pop();
+      break;
+    }
+  }
+  return arr;
+});
 </script>
 
 <template>
 <div class="pie-chart shadow-md" @mousedown="down" ref="pieRef">
   <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
   <div
-    class="pie-drag-btn scale-[1.15] transition-transform shadow-md bg-transparent border-[8px] border-gray-900 cursor-pointer absolute rounded-full z-10"
-    :style="{...getPieDargPosition(hue)}"
-  ></div>
+    class="pie-drag-btn flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
+    :style="{...getPieDargPosition(hue), '--hue': hue}"
+  >
+    <ElIcon><Mouse /></ElIcon>
+  </div>
 
-  <!-- <div
-    class="pie-drag-btn hover:scale-[1.15] transition-transform shadow-md bg-white border-2 cursor-pointer absolute rounded-full z-10"
-    :style="{...getPieDargPosition(getAngle(hue > 180 ? hue - 180 : 180 + hue))}"
-    @mousedown="(e) => {
-      e.stopPropagation();
-    }"
-  ></div> -->
+
+  <ElTooltip
+    effect="light"
+    :content="String(item.hue)"
+    placement="top"
+    v-for="item in recommendColorArray"
+    :key="item.name"
+  >
+    <div
+      class="pie-drag-btn preview flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
+      :style="{...getPieDargPosition(item.hue)}"
+      @mousedown="(e) => {e.stopPropagation()}"
+      @click=""
+    >
+      <ElIcon><CopyDocument /></ElIcon>
+    </div>
+  </ElTooltip>
+
+
 </div>
 </template>
 
@@ -131,6 +183,23 @@ $pieSize: v-bind(pieSizeString);
   .pie-drag-btn {
     width: $borderSize;
     height: $borderSize;
+    box-shadow: inset 5px 5px 10px #1f2123,inset -5px -5px 10px #7d858b;
+    color: white;
+    mix-blend-mode: difference;
+
+    &.preview {
+      box-shadow: inset 5px 5px 10px #666666,inset -5px -5px 10px #ffffff;
+      color: white;
+      mix-blend-mode: difference;
+
+      &:hover ::v-deep(.el-icon) {
+        opacity: 1;
+      }
+      ::v-deep(.el-icon) {
+        opacity: 0;
+        transition: opacity;
+      }
+    }
   }
 }
 </style>

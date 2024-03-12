@@ -1,13 +1,21 @@
 import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import tinycolor2 from 'tinycolor2';
+import tinycolor2, { ColorFormats } from 'tinycolor2';
+import { divideAngle } from "../utils";
+
+export enum ColorRecommendTypeEnum {
+  NULL = 0,
+  Complementary = 2,
+  Triadic = 3,
+  Tetradic = 4,
+}
 
 type ColorType = {
   hex?: string,
   hue?: number,
   sv?: { s?: number, v?: number },
   sl?: { s?: number, l?: number },
-  rgb?: { r?: number, g?: number, b?: number }
+  rgb?: ColorFormats.RGB
 }
 enum ColorTypeEnum {
   hex = 'hex',
@@ -38,9 +46,38 @@ const useColorsStore = defineStore('color', () => {
   })
   /** 透明度 */
   const opacity = ref(100);
+
   const hsv = computed(() => ({ h: hue.value, s: sv.s / 100, v: sv.v / 100 }));
-  const hsl = computed(() => ({ h: hue.value, s: sl.s / 100, l: sl.l / 100 }));
   const hslString = computed(() => `hsla(${hue.value}, ${sl.s}%, ${sl.l}%, ${opacity.value}%)`);
+
+  /** 推荐类型 */
+  const colorRecommendType = ref<ColorRecommendTypeEnum>(ColorRecommendTypeEnum.NULL)
+  /** 推荐颜色 */
+  const colorRecommend = computed(() => {
+    const color = tinycolor2({...hsv.value, a: opacity.value / 100 });
+    const [, h_120, h_240] = divideAngle(hue.value, 3);
+    const [, h_90, h_180, h_270] = divideAngle(hue.value, 4);
+    
+    // 互补组合
+    const color_0 = color.toRgb();
+    const color_180 = tinycolor2({ h: h_180, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+  
+    // 三色组合
+    const color_120 = tinycolor2({ h: h_120, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+    const color_240 = tinycolor2({ h: h_240, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+  
+    // 四色组合
+    const color_90 = tinycolor2({ h: h_90, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+    const color_270 = tinycolor2({ h: h_270, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
+    return {
+      color_0,
+      color_120,
+      color_240,
+      color_90,
+      color_180,
+      color_270
+    }
+  })
 
   const change = (color: tinycolor2.Instance, updateArr: ColorTypeEnum[]) => {
     const v_hex = color.toHex();
@@ -82,6 +119,7 @@ const useColorsStore = defineStore('color', () => {
       }
     });
   }
+  /** 更新颜色 */
   const updateColor = ({
     hex: argHex,
     hue: argHue,
@@ -112,14 +150,16 @@ const useColorsStore = defineStore('color', () => {
       change(tinycolor2({ h: hue.value, s: (argSv.s ?? sv.s) / 100, v: (argSv.v ?? sv.v)/ 100 }), [ColorTypeEnum.sv, ColorTypeEnum.hue])
     }
   }
-
+  /** 更新透明度 */
   const updateOpacity = (argOpacity: number) => {
     opacity.value = argOpacity;
   }
+  /** 拷贝颜色 */
   return {
+    colorRecommendType,
+    colorRecommend,
     hex,
     hsv,
-    hsl,
     sl,
     sv,
     hue,

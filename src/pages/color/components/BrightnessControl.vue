@@ -89,7 +89,8 @@ $pieSize: v-bind(pieSizeString);
     background: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
   }
   .square-drag-btn {
-    background: radial-gradient(transparent 40%, white 0%);
+    background: radial-gradient(transparent 30%, white 0%);
+    mix-blend-mode: difference;
   }
 }
 </style>

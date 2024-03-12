@@ -7,7 +7,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <header class="flex items-center justify-between min-w-[800px] shadow-lg py-4 lg:px-12 px-4 h-16 sticky top-0 z-10 bg-white">
+  <header class="flex items-center justify-between min-w-[800px] shadow-lg py-4 lg:px-12 px-4 h-16 sticky top-0 z-20 bg-white">
     <div class="flex items-center">
       <img class="h-14" src="../../public/logo.png" style="margin: -12px; filter: invert(1);" />
       <div class="text-lg">Tools</div>
