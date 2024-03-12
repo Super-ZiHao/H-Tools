@@ -1,45 +1,37 @@
 <script lang='ts' setup>
 import { computed, defineProps } from 'vue';
-import tinycolor2, { ColorFormats } from 'tinycolor2';
+import tinycolor2, { ColorInputWithoutInstance } from 'tinycolor2';
 import useColorsStore from '../hook/useColorsStore';
-
+import { CopyDocument } from '@element-plus/icons-vue';
 const props = defineProps<{
-  color?: ColorFormats.HSLA | ColorFormats.HSVA | ColorFormats.RGBA
+  color?: ColorInputWithoutInstance
 }>()
 
-const { updateColor, updateOpacity } = useColorsStore();
+const { updateColor, copyColor } = useColorsStore();
 const backgroundColor = computed(() => {
   const color = tinycolor2(props.color);
-  if (props.color?.a === 1) {
+  const alpha = color.getAlpha();
+  if (alpha === 1) {
     return color.toHexString();
   }
   return color.toHex8String();
 });
 
-const handlerClick = () => {
-  const colorType = tinycolor2(props.color).getFormat();
-  switch (colorType) {
-    case 'rgb':
-      // @ts-ignore
-      updateColor({ rgb: props.color }, true);
-      break;
-    case 'hsl':
-      // @ts-ignore
-      updateColor({ hsl: props.color }, true);
-      break;
-    case 'hsv':
-      // @ts-ignore
-      updateColor({ hsv: props.color }, true);
-      break;
-  }
-  updateOpacity((props.color?.a ?? 1) * 100);
+const handlerCopy = (e: MouseEvent) => {
+  e.stopPropagation();
+  copyColor(tinycolor2(props.color).toRgbString())
 }
+
 
 </script>
 
 <template>
-  <div class="color-card cursor-pointer transition-transform" @click="handlerClick" v-bind="$attrs" v-if="!!color">
+  <div class="color-card cursor-pointer transition-transform" @click="updateColor('auto', color)" v-bind="$attrs" v-if="!!color">
     <div class="hex-string absolute inset-0 z-10 flex items-center justify-center text-white mix-blend-difference">{{ backgroundColor }}</div>
+
+    <div class="color-card-copy absolute top-0 right-0 z-20 px-3 rounded-bl-md transition-all text-white py-1" @click="handlerCopy">
+      <ElIcon><CopyDocument /></ElIcon>
+    </div>
   </div>
   <div class="bg-white" v-else></div>
 </template>
@@ -68,5 +60,17 @@ $grid-2: transparent;
   .hex-string {
     position: absolute;
   }
+
+  .color-card-copy {
+    opacity: 0;
+    background-color: rgba($color: #000000, $alpha: .3);
+    &:hover {
+      background-color: rgba($color: #000000, $alpha: .6);
+    }
+  }
+  &:hover .color-card-copy{
+    opacity: 1;
+  }
 }
+
 </style>

@@ -5,36 +5,34 @@ import { storeToRefs } from 'pinia';
 import ColorCard from './components/ColorCard.vue';
 import { Hide } from '@element-plus/icons-vue';
 import { ElLink } from 'element-plus';
+import { computed } from 'vue';
+import { divideAngle } from './utils';
 
 
-const { colorRecommendType, colorRecommend } = storeToRefs(useColorsStore())
+const { colorRecommendNumber, sv, alpha, hue } = storeToRefs(useColorsStore())
+
+const hueRecommend = computed(() => divideAngle(hue.value, colorRecommendNumber.value))
 
 </script>
 
 <template>
   <ColorLayoutCard>
-    <ElTabs type="border-card" v-model="colorRecommendType">
+    <ElTabs type="border-card" v-model="colorRecommendNumber">
       <ElTabPane class="flex gap-3" label="互补色" :name="ColorRecommendTypeEnum.Complementary">
-        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" :color="colorRecommend.color_0" />
-        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" :color="colorRecommend.color_180" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
       </ElTabPane>
       <ElTabPane class="flex gap-3" label="三色" :name="ColorRecommendTypeEnum.Triadic">
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="colorRecommend.color_0" />
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="colorRecommend.color_120" />
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.04]" :color="colorRecommend.color_240" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.04]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
       </ElTabPane>
       <ElTabPane class="grid grid-cols-2 gap-3" label="四色" :name="ColorRecommendTypeEnum.Tetradic">
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="colorRecommend.color_0" />
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="colorRecommend.color_90" />
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="colorRecommend.color_180" />
-        <ColorCard class="w-full h-full rounded-xl text-xl hover:scale-[1.06]" :color="colorRecommend.color_270" />
+        <ColorCard class="w-full h-full rounded-xl text-2xl hover:scale-[1.06]" v-for="h in hueRecommend" :color="{ h, s: sv.s, v: sv.v, a: alpha }" :key="h" />
       </ElTabPane>
     </ElTabs>
     <ElLink
-      :class="`${colorRecommendType === ColorRecommendTypeEnum.NULL ? 'text-blue-600' : 'text-gray-300 active:text-blue-400 hover:text-violet-300'} absolute right-8 top-4  transition-colors  cursor-pointer flex items-center gap-1`"
+      :class="`${colorRecommendNumber === ColorRecommendTypeEnum.NULL ? 'text-blue-600' : 'text-gray-300 active:text-blue-400 hover:text-violet-300'} absolute right-8 top-4  transition-colors  cursor-pointer flex items-center gap-1`"
       :icon="Hide"
       :underline="false"
-      @click="colorRecommendType = ColorRecommendTypeEnum.NULL"
+      @click="colorRecommendNumber = ColorRecommendTypeEnum.NULL"
     >隐藏</ElLink>
   </ColorLayoutCard>
 </template>

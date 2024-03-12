@@ -1,7 +1,7 @@
 <!-- 饱和度亮度板 - 控件 -->
 <script lang='ts' setup>
 import { ref, defineProps } from 'vue';
-import useColorsStore from '../hook/useColorsStore';
+import useColorsStore, { ColorTypeEnum } from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
 
 defineProps<{
@@ -33,7 +33,14 @@ const handlerChangeOffset = (e: MouseEvent) => {
   } else {
     v = 100;
   }
-  updateColor({ sv: { s, v } }, true)
+
+  /**
+   * 特殊情况，需要在外部修改值!!!!!!!!!!!!!!!!!!
+   * 鉴于 vue 双向绑定，尽量不要在外面直接修改 store 中的值，会为以后留下坑
+  */
+  sv.value.s = s;
+  sv.value.v = v;
+  updateColor('hsva', {}, [ColorTypeEnum.HSV])
 }
 
 const handlerSquareDown = (e: MouseEvent) => {

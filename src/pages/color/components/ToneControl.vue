@@ -1,10 +1,9 @@
 <!-- 色调环 - 控件 -->
 <script lang='ts' setup>
 import { defineProps, withDefaults, ref, computed } from 'vue';
-import useColorsStore, { ColorRecommendTypeEnum } from '../hook/useColorsStore';
+import useColorsStore from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
-import { getAngle } from '../utils'
-import tinycolor from 'tinycolor2';
+import { divideAngle, getAngle } from '../utils'
 import { CopyDocument, Mouse } from '@element-plus/icons-vue';
 
 const startAngle = 0; // 开始的角度
@@ -15,10 +14,11 @@ const props = withDefaults(defineProps<{
 }>(), {
 
 });
-const { hue, colorRecommend, colorRecommendType } = storeToRefs(useColorsStore());
-const { updateColor } = useColorsStore();
+const { hue, colorRecommendNumber } = storeToRefs(useColorsStore());
+const { updateColor, copyColor } = useColorsStore();
 const pieRef = ref<HTMLDivElement>()
 
+const getRadians = (angle: number) => (angle * (Math.PI / 180));
 const getPieDargPosition = (currentAngle: number) => {
   if (!pieRef.value) return;
   const { width } = pieRef.value.getBoundingClientRect();
@@ -37,7 +37,6 @@ const getPieDargPosition = (currentAngle: number) => {
   }
 }
 
-const getRadians = (angle: number) => (angle * (Math.PI / 180));
 
 const change = (e: MouseEvent)=>{
   e.stopPropagation()
@@ -56,7 +55,8 @@ const change = (e: MouseEvent)=>{
   // 根据圆的起始方向调整角度（如果是从水平向右开始，则需要减去90度）
   const adjustedAngle = angle - startAngle;
   const currentAngle = (adjustedAngle + 360) % 360;
-  updateColor({ hue: currentAngle }, true)
+
+  updateColor('hsva', { h: currentAngle })
 }
 
 const up = () => {
@@ -73,39 +73,8 @@ const down = (e: MouseEvent) => {
 
 
 /** 推荐颜色逻辑 */
-const recommendColorArray = computed(() => {
-  const arr: any[] = [];
+const hueRecommend = computed(() => divideAngle(hue.value, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
 
-
-  const allArr = Object.keys(colorRecommend.value).map(item => ({
-    name: item,
-    // @ts-ignore
-    hue: tinycolor(colorRecommend.value[item]).toHsl().h,
-  }))
-
-  switch (colorRecommendType.value) {
-    case ColorRecommendTypeEnum.Complementary: {
-      arr.push(allArr.find(item => item.name === 'color_180') ?? {})
-      break;
-    }
-    case ColorRecommendTypeEnum.Triadic: {
-      arr.push(allArr.find(item => item.name === 'color_120') ?? {})
-      arr.push(allArr.find(item => item.name === 'color_240') ?? {})
-      break;
-    }
-    case ColorRecommendTypeEnum.Tetradic: {
-      arr.push(allArr.find(item => item.name === 'color_90') ?? {})
-      arr.push(allArr.find(item => item.name === 'color_180') ?? {})
-      arr.push(allArr.find(item => item.name === 'color_270') ?? {})
-      break;
-    }
-    case ColorRecommendTypeEnum.NULL: {
-      arr.pop();
-      break;
-    }
-  }
-  return arr;
-});
 </script>
 
 <template>
@@ -120,17 +89,16 @@ const recommendColorArray = computed(() => {
 
 
   <ElTooltip
-    effect="light"
-    :content="String(item.hue)"
+    :content="String(Math.round(item))"
     placement="top"
-    v-for="item in recommendColorArray"
-    :key="item.name"
+    v-for="item in hueRecommend"
+    :key="item"
   >
     <div
       class="pie-drag-btn preview flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-      :style="{...getPieDargPosition(item.hue)}"
+      :style="{...getPieDargPosition(item)}"
       @mousedown="(e) => {e.stopPropagation()}"
-      @click=""
+      @click="() => copyColor(String(item))"
     >
       <ElIcon><CopyDocument /></ElIcon>
     </div>

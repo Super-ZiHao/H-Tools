@@ -1,17 +1,18 @@
 <!-- 输入控件 -->
 <script lang='ts' setup>
-import useColorsStore from '../hook/useColorsStore';
+import useColorsStore, { ColorTypeEnum } from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
 import { CopyDocument } from '@element-plus/icons-vue';
 import NumberInput from './NumberInput.vue';
 import useHistoryColor from '../hook/useHistoryColor';
+import tinycolor from 'tinycolor2';
 
-const { hslString, hue, sl, sv, hex, rgb, opacity } = storeToRefs(useColorsStore());
+const { hslString, hue, sl, sv, hex, rgb, alpha } = storeToRefs(useColorsStore());
 const { updateColor } = useColorsStore();
 const { saveHistoryColor } = useHistoryColor();
 
 const handlerSave = () => {
-  saveHistoryColor({ ...rgb.value, a: opacity.value / 100 })
+  saveHistoryColor({ ...rgb.value, a: alpha.value / 100 })
   ElNotification({
     title: '保存成功',
     message: '颜色已保存到历史记录',
@@ -25,7 +26,7 @@ const handlerSave = () => {
   <div class="pt-3 pr-5 pb-4 flex flex-col justify-between flex-1">
     <div class="rounded-md overflow-hidden">
       <div class="color-palette w-full h-28 relative overflow-hidden"></div>
-      <ElInput class="hex-input overflow-hidden" v-model="hex" maxlength="6" @input="(v: string) => updateColor({ hex: v })">
+      <ElInput class="hex-input overflow-hidden" v-model="hex" maxlength="6" @input="(v) => (!!tinycolor(v).getFormat() && updateColor('hex8' , v, [ColorTypeEnum.HEX]))">
         <template #prepend>#</template>
         <template #append>
           <ElIcon>
@@ -35,14 +36,14 @@ const handlerSave = () => {
       </ElInput>
     </div>
     <div class="grid grid-cols-2 gap-2">
-      <NumberInput v-model="rgb.r" title="R" :max="255" @change="(r) => updateColor({ rgb: { r } })" />
-      <NumberInput v-model="rgb.g" title="G" :max="255" @change="(g) => updateColor({ rgb: { g } })" />
-      <NumberInput v-model="rgb.b" title="B" :max="255" @change="(b) => updateColor({ rgb: { b } })" />
-      <NumberInput v-model="hue" title="H" :max="360" @change="(hue) => updateColor({ hue })" />
-      <NumberInput v-model="sv.s" title="S" :max="100" @change="(s) => updateColor({ sv: { s } })" />
-      <NumberInput v-model="sv.v" title="V" :max="100" @change="(v) => updateColor({ sv: { v } })" />
-      <NumberInput v-model="sl.s" title="S" :max="100" @change="(s) => updateColor({ sl: { s } })" />
-      <NumberInput v-model="sl.l" title="L" :max="100" @change="(l) => updateColor({ sl: { l } })" />
+      <NumberInput v-model="rgb.r" title="R" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="rgb.g" title="G" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="rgb.b" title="B" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="hue" title="H" :max="360" @change="updateColor('hsva')" />
+      <NumberInput v-model="sv.s" title="S" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="sv.v" title="V" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="sl.s" title="S" :max="100" @change="updateColor('hsla')" />
+      <NumberInput v-model="sl.l" title="L" :max="100" @change="updateColor('hsla')" />
     </div>
     <ElButton type="primary" @click="handlerSave">
       保存颜色

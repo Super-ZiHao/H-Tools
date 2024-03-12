@@ -1,8 +1,10 @@
 import { computed, reactive, ref } from "vue";
 import { defineStore } from "pinia";
-import tinycolor2, { ColorFormats } from 'tinycolor2';
-import { divideAngle } from "../utils";
+import { copy } from 'clipboard';
+import tinycolor2, { ColorFormats, ColorInputWithoutInstance } from 'tinycolor2';
 
+type ColorType = 'rgba' | 'hsla' | 'hsva' | 'hex8' | 'auto'
+type ColorInput = ColorFormats.HSLA & ColorFormats.HSVA & ColorFormats.RGBA
 export enum ColorRecommendTypeEnum {
   NULL = 0,
   Complementary = 2,
@@ -10,26 +12,21 @@ export enum ColorRecommendTypeEnum {
   Tetradic = 4,
 }
 
-type ColorType = {
-  hex?: string,
-  hue?: number,
-  sv?: { s?: number, v?: number },
-  sl?: { s?: number, l?: number },
-  rgb?: ColorFormats.RGB
+export enum ColorTypeEnum {
+  RGB = 'rgb',
+  HEX = 'hex',
+  HSL = 'hsl',
+  HSV = 'hsv',
+  ALPHA = 'alpha',
+  HUE = 'hue',
 }
-enum ColorTypeEnum {
-  hex = 'hex',
-  hue = 'hue',
-  sv = 'sv',
-  sl = 'sl',
-  rgb = 'rgb',
-}
+const DEFAULT_ARR: any[] = []
 
 /** 颜色核心 */
 const useColorsStore = defineStore('color', () => {
   const hex = ref('ff0000');
   const hue = ref(0);
-  /** sv */ 
+  /** sv */
   const sv = reactive({
     s: 100,
     v: 100,
@@ -45,129 +42,69 @@ const useColorsStore = defineStore('color', () => {
     b: 0
   })
   /** 透明度 */
-  const opacity = ref(100);
+  const alpha = ref(100);
 
   const hsv = computed(() => ({ h: hue.value, s: sv.s / 100, v: sv.v / 100 }));
-  const hslString = computed(() => `hsla(${hue.value}, ${sl.s}%, ${sl.l}%, ${opacity.value}%)`);
+  const hslString = computed(() => `hsla(${hue.value}, ${sl.s}%, ${sl.l}%, ${alpha.value}%)`);
 
   /** 推荐类型 */
-  const colorRecommendType = ref<ColorRecommendTypeEnum>(ColorRecommendTypeEnum.NULL)
-  /** 推荐颜色 */
-  const colorRecommend = computed(() => {
-    const color = tinycolor2({...hsv.value, a: opacity.value / 100 });
-    const [, h_120, h_240] = divideAngle(hue.value, 3);
-    const [, h_90, h_180, h_270] = divideAngle(hue.value, 4);
-    
-    // 互补组合
-    const color_0 = color.toRgb();
-    const color_180 = tinycolor2({ h: h_180, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
-  
-    // 三色组合
-    const color_120 = tinycolor2({ h: h_120, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
-    const color_240 = tinycolor2({ h: h_240, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
-  
-    // 四色组合
-    const color_90 = tinycolor2({ h: h_90, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
-    const color_270 = tinycolor2({ h: h_270, s: hsv.value.s, v: hsv.value.v, a: opacity.value / 100 }).toRgb();
-    return {
-      color_0,
-      color_120,
-      color_240,
-      color_90,
-      color_180,
-      color_270
-    }
-  })
+  const colorRecommendNumber = ref<ColorRecommendTypeEnum>(ColorRecommendTypeEnum.NULL)
 
-  const change = (color: tinycolor2.Instance, updateArr: ColorTypeEnum[]) => {
-    const v_hex = color.toHex();
-    const v_hsl = color.toHsl();
-    const v_hsv = color.toHsv();
-    const v_rgb = color.toRgb();
-    const currentArray =Object.keys(ColorTypeEnum).filter(i => !updateArr.includes(i as ColorTypeEnum));
-    currentArray.forEach((item) => {
+  const updateColor = (updateColorType: ColorType, value?: any, arr: ColorTypeEnum[] = DEFAULT_ARR) => {
+    const {
+      h = hue.value,
+      s = (updateColorType === 'hsva' ? sv.s : sl.s) / 100,
+      v = sv.v / 100,
+      l = sl.l / 100,
+      r = rgb.r,
+      g = rgb.g,
+      b = rgb.b,
+      a = alpha.value / 100
+    } = (typeof value === 'string' ? {} : value) as ColorInput;
+    let tinycolor: tinycolor2.Instance;
+
+    switch (updateColorType) {
+      case 'hex8': tinycolor = tinycolor2(hex.value); break;
+      case 'hsla': tinycolor = tinycolor2({ h, s, l, a }); break;
+      case 'rgba': tinycolor = tinycolor2({ r, g, b, a }); break;
+      case 'hsva': tinycolor = tinycolor2({ h, s, v, a }); break;
+      case 'auto': tinycolor = tinycolor2(value as ColorInputWithoutInstance); break;
+      default: tinycolor = tinycolor2(hex.value); break;
+    }
+
+    const hsv = tinycolor.toHsv()
+    const hsl = tinycolor.toHsl()
+    const colorType: ColorTypeEnum[] = Object.values(ColorTypeEnum) as any;
+    const useColorArr = colorType.filter(item => !arr.includes(item as ColorTypeEnum))
+
+    useColorArr.forEach(item => {
       switch (item) {
-        case ColorTypeEnum.hue: {
-          hue.value = v_hsl.h;
-          break;
-        }
-        case ColorTypeEnum.sv: {
-          Object.assign(sv, {
-            s: v_hsv.s * 100,
-            v: v_hsv.v * 100
-          })
-          break;
-        }
-        case ColorTypeEnum.sl: {
-          Object.assign(sl, {
-            s: v_hsl.s * 100,
-            l: v_hsl.l * 100
-          })
-          break;
-        }
-        case ColorTypeEnum.rgb: {
-          Object.assign(rgb, v_rgb);
-          break;
-        }
-        case ColorTypeEnum.hex: {
-          hex.value = v_hex;
-          break;
-        }
-        default: {
-          break;
-        }
+        case ColorTypeEnum.HEX: hex.value = tinycolor.toHex(); break;
+        case ColorTypeEnum.HUE: hue.value = hsv.h; break;
+        case ColorTypeEnum.ALPHA: alpha.value = hsv.a * 100; break;
+        case ColorTypeEnum.RGB: Object.assign(rgb, tinycolor.toRgb()); break;
+        case ColorTypeEnum.HSL: Object.assign(sl, { s: hsl.s * 100, l: hsl.l * 100 }); break;
+        case ColorTypeEnum.HSV: Object.assign(sv, { s: hsv.s * 100, v: hsv.v * 100 }); break;
       }
-    });
-  }
-  /** 更新颜色 */
-  const updateColor = ({
-    hex: argHex,
-    hue: argHue,
-    rgb: argRgb,
-    sl: argSl,
-    sv: argSv,
-  }: ColorType, deep: boolean = false) => {
-    if (deep) {
-      argHex && (hex.value = argHex);
-      argHue && (hue.value = argHue);
-      argRgb && (Object.assign(rgb, argRgb));
-      argSl && (Object.assign(sl, argSl));
-      argSv && (Object.assign(sv, argSv));
-    }
-    if (argHex) {
-      change(tinycolor2(argHex ?? hex.value), [ColorTypeEnum.hex])
-    }
-    if (argHue || argHue === 0) {
-      change(tinycolor2({ h: argHue ?? hex.value, s: sl.s / 100, l: sl.l / 100 }), [ColorTypeEnum.hue, ColorTypeEnum.sl, ColorTypeEnum.sv])
-    }
-    if (argRgb) {
-      change(tinycolor2({ ...rgb, ...argRgb }), [ColorTypeEnum.rgb])
-    }
-    if (argSl) {
-      change(tinycolor2({ h: hue.value, s: (argSl.s ?? sv.s) / 100, l: (argSl.l ?? sv.v)/ 100 }), [ColorTypeEnum.sl, ColorTypeEnum.hue])
-    }
-    if (argSv) {
-      change(tinycolor2({ h: hue.value, s: (argSv.s ?? sv.s) / 100, v: (argSv.v ?? sv.v)/ 100 }), [ColorTypeEnum.sv, ColorTypeEnum.hue])
-    }
-  }
-  /** 更新透明度 */
-  const updateOpacity = (argOpacity: number) => {
-    opacity.value = argOpacity;
+    })
   }
   /** 拷贝颜色 */
+  const copyColor = (s: string) => {
+    copy(s);
+    ElMessage.success(`复制成功: ${s}`);
+  }
   return {
-    colorRecommendType,
-    colorRecommend,
+    colorRecommendNumber,
     hex,
     hsv,
     sl,
     sv,
     hue,
-    opacity,
+    alpha,
     rgb,
     hslString,
     updateColor,
-    updateOpacity,
+    copyColor,
   }
 });
 
