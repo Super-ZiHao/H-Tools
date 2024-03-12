@@ -23,7 +23,6 @@ export const toolsRouter: RouteRecordRaw[] = [
     component: () => import('@/pages/color/index.vue'),
     meta: {
       bgColor: '#343434',
-      // headerBgColor: '#343434'
     }
   },
   {
