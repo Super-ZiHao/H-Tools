@@ -6,7 +6,7 @@ import Recommend from './Recommend.vue'
 </script>
 
 <template>
-	<div class="color-container grid gap-4 w-full h-full flex-1 max-w-[1280px] rounded-2xl">
+	<div class="color-container grid gap-4 w-full h-full flex-1 max-w-[1280px] rounded-2xl m-auto">
     <ColorBoard class="color-board shadow-md" />
     <Info class="color-info shadow-md" />
     <History class="color-history shadow-md" />

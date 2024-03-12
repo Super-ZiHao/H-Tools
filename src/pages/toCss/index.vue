@@ -9,7 +9,7 @@ const mode = ref<Mode>(Mode.SCSS)
 </script>
 
 <template>
-  <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4">
+  <div class="shadow-2xl border rounded-xl w-full h-full max-w-[1440px] p-4 flex gap-4 m-auto">
     <!-- scss 编辑器 -->
     <div class="flex-1 h-full flex items-center flex-col gap-4 relative">
       <div class="absolute z-10 left-2 bottom-2">
