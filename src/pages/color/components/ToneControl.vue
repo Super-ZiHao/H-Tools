@@ -19,7 +19,7 @@ const { updateColor, copyColor, currentColorCore } = useColorsStore();
 const pieRef = ref<HTMLDivElement>()
 
 const getRadians = (angle: number) => (angle * (Math.PI / 180));
-const getPieDargPosition = (currentAngle: number) => {
+const pieDargPosition = (currentAngle: number) => {
   if (!pieRef.value) return;
   const { width } = pieRef.value.getBoundingClientRect();
   const radius = (width - props.borderSize) / 2; // 圆半径
@@ -31,10 +31,8 @@ const getPieDargPosition = (currentAngle: number) => {
   // 计算滑块在x轴和y轴的位置
   const x = radius * Math.cos(angleDifference) + radius; // 假设圆盘的中心在原点(0,0)
   const y = radius * Math.sin(angleDifference) + radius;
-  return {
-    left: `${x}px`,
-    top: `${y}px`,
-  }
+
+  return `translate(${x}px, ${y}px)`
 }
 
 
@@ -49,7 +47,6 @@ const change = (e: MouseEvent) => {
   // 计算鼠标坐标相对于圆心的坐标
   const relativeX = clientX - centerX;
   const relativeY = clientY - centerY;
-  // 获取弧度
   // 计算角度
   const angle = Math.atan2(relativeY, relativeX) * (180 / Math.PI);
   // 根据圆的起始方向调整角度（如果是从水平向右开始，则需要减去90度）
@@ -88,8 +85,8 @@ const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
   <div class="pie-chart" @mousedown="down" ref="pieRef">
     <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
     <div
-      class="pie-drag-btn flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-      :style="{ ...getPieDargPosition(currentColorCore.hue), '--hue': currentColorCore.hue }">
+      class="pie-drag-btn flex items-center justify-center cursor-pointer absolute rounded-full z-10"
+      :style="{ transform: pieDargPosition(currentColorCore.hue), '--hue': currentColorCore.hue }">
       <ElIcon>
         <Mouse />
       </ElIcon>
@@ -97,8 +94,8 @@ const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
 
     <ElTooltip :content="`Hue: ${String(Math.round(item))}`" placement="top" v-for="item in hueRecommend" :key="item">
       <div
-        class="pie-drag-btn preview flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-        :style="{ ...getPieDargPosition(item) }" @mousedown="(e) => { e.stopPropagation() }"
+        class="pie-drag-btn preview flex items-center justify-center cursor-pointer absolute rounded-full z-10"
+        :style="{ transform: pieDargPosition(item) }" @mousedown="(e) => { e.stopPropagation() }"
         @click="() => copyColor(String(item))">
         <ElIcon>
           <CopyDocument />
@@ -160,22 +157,18 @@ $pieSize: v-bind(pieSizeString);
   .pie-drag-btn {
     width: $borderSize;
     height: $borderSize;
-    box-shadow: inset 5px 5px 10px #1f2123, inset -5px -5px 10px #7d858b;
-    color: white;
-    mix-blend-mode: difference;
+
+    background-color: white;
+    color: #000;
 
     &.preview {
-      box-shadow: inset 5px 5px 10px #666666, inset -5px -5px 10px #ffffff;
-      color: white;
-      mix-blend-mode: difference;
-
       &:hover ::v-deep(.el-icon) {
         opacity: 1;
       }
 
       ::v-deep(.el-icon) {
         opacity: 0;
-        transition: opacity;
+        transition: opacity .2s;
       }
     }
   }

@@ -10,7 +10,7 @@ import { computed } from 'vue';
 const { updateColor, copyColor, currentColorCore } = useColorsStore();
 const { saveHistoryColor } = useHistoryColor();
 
-const hslString = computed(() => `hsla(${currentColorCore.hue}, ${currentColorCore.sl_s}%, ${currentColorCore.l}%, ${currentColorCore.alpha}%)`);
+const hslString = computed(() => `rgba(${currentColorCore.r}, ${currentColorCore.g}, ${currentColorCore.b}, ${currentColorCore.alpha}%)`);
 
 const handlerSave = () => {
   saveHistoryColor({ r: currentColorCore.r, g: currentColorCore.g, b: currentColorCore.b, a: currentColorCore.alpha / 100 })

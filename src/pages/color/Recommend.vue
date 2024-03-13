@@ -8,24 +8,24 @@ import { ElLink } from 'element-plus';
 import { computed } from 'vue';
 import { divideAngle } from './utils';
 
-
 const { colorRecommendNumber } = storeToRefs(useColorsStore())
 const { currentColorCore } = useColorsStore();
 const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecommendNumber.value))
 
+const getColor = (h: number) => ({ h, s: currentColorCore.sv_s, v: currentColorCore.v, a: currentColorCore.alpha / 100 })
 </script>
 
 <template>
   <ColorLayoutCard>
     <ElTabs type="border-card" v-model="colorRecommendNumber">
       <ElTabPane class="flex gap-3" label="互补色" :name="ColorRecommendTypeEnum.Complementary">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="{ h, s: currentColorCore.sv_s, v: currentColorCore.v, a: currentColorCore.alpha / 100 }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="getColor(h)" :key="h" />
       </ElTabPane>
       <ElTabPane class="flex gap-3" label="三色" :name="ColorRecommendTypeEnum.Triadic">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.04]" v-for="h in hueRecommend" :color="{ h, s: currentColorCore.sv_s, v: currentColorCore.v, a: currentColorCore.alpha / 100 }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.04]" v-for="h in hueRecommend" :color="getColor(h)" :key="h" />
       </ElTabPane>
       <ElTabPane class="grid grid-cols-2 gap-3" label="四色" :name="ColorRecommendTypeEnum.Tetradic">
-        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" v-for="h in hueRecommend" :color="{ h, s: currentColorCore.sv_s, v: currentColorCore.v, a: currentColorCore.alpha / 100 }" :key="h" />
+        <ColorCard class="w-full h-full rounded-xl hover:scale-[1.06]" v-for="h in hueRecommend" :color="getColor(h)" :key="h" />
       </ElTabPane>
     </ElTabs>
     <ElLink

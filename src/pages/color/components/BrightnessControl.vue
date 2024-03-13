@@ -2,6 +2,7 @@
 <script lang='ts' setup>
 import { ref, defineProps } from 'vue';
 import useColorsStore, { UpdateColorTypeEnum } from '../hook/useColorsStore';
+import { computed } from 'vue';
 
 defineProps<{
   sizeString: string;
@@ -10,6 +11,8 @@ defineProps<{
 
 const { updateColor, currentColorCore } = useColorsStore()
 const squareRef = ref<HTMLDivElement>();
+
+
 const handlerChangeOffset = (e: MouseEvent) => {
   e.stopPropagation()
   e.preventDefault()
@@ -38,7 +41,7 @@ const handlerChangeOffset = (e: MouseEvent) => {
   */
   currentColorCore.sv_s = s;
   currentColorCore.v = v;
-  updateColor('hsva', {}, [UpdateColorTypeEnum.HSV])
+  updateColor('hsva', {}, [UpdateColorTypeEnum.HSV, UpdateColorTypeEnum.HUE])
 }
 
 const handlerSquareDown = (e: MouseEvent) => {
@@ -51,6 +54,11 @@ const handlerSquareDown = (e: MouseEvent) => {
   document.body.addEventListener('mouseup', up)
 }
 
+// 计算滑块位移
+const translate = computed(() => {
+  if (!squareRef.value) return '';
+  return `translate(${currentColorCore.sv_s / 100 * squareRef.value.offsetWidth}px, ${((100 - currentColorCore.v) / 100) * squareRef.value.offsetHeight}px)`
+})
 </script>
 
 <template>
@@ -61,8 +69,8 @@ const handlerSquareDown = (e: MouseEvent) => {
     ref="squareRef"
   >
     <div
-      class="square-drag-btn pointer-events-none absolute translate-x-[-8px] translate-y-[-8px] w-4 h-4 rounded-full z-10"
-      :style="{ left: `${currentColorCore.sv_s}%`, top: `${(100 - currentColorCore.v)}%` }"
+      class="square-drag-btn pointer-events-none absolute left-[-8px] top-[-8px] w-4 h-4 rounded-full z-10"
+      :style="{ transform: translate }"
     ></div>
   </div>
 </template>

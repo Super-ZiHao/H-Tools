@@ -59,7 +59,6 @@ const useColorsStore = defineStore('color', () => {
     const rgb = colorCore.toRgb()
     const hsl = colorCore.toHsl()
     const hsv = colorCore.toHsv()
-    console.log(rgb)
     Object.assign(currentColorCore, {
       hex: colorCore.toHex(),
       r: rgb.r,
