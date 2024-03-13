@@ -16,7 +16,7 @@ const getColor = (h: number) => ({ h, s: currentColorCore.sv_s, v: currentColorC
 </script>
 
 <template>
-  <ColorLayoutCard>
+  <ColorLayoutCard class="min-h-[300px]">
     <ElTabs type="border-card" v-model="colorRecommendNumber">
       <ElTabPane class="flex gap-3" label="互补色" :name="ColorRecommendTypeEnum.Complementary">
         <ColorCard class="w-full h-full rounded-xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="getColor(h)" :key="h" />

@@ -37,7 +37,7 @@ const getStringBgColor = (type: ColorTypeEnum) => {
 </script>
 
 <template>
-  <ColorLayoutCard title="格式坞">
+  <ColorLayoutCard class="min-h-[240px]" title="格式坞">
     <div class="pt-3 flex flex-col gap-4 px-4 w-full">
       <!-- <ElInput class="switch-input" :prefixIcon="Switch" /> -->
       <div class="grid grid-cols-2 gap-2">

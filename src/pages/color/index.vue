@@ -16,12 +16,26 @@ import Recommend from './Recommend.vue'
 
 <style lang='scss' scoped>
 .color-container {
+
   grid-template-columns: 340px 100px 140px 100px 1fr 1fr;
   grid-template-rows: 330px 100px 72px 1fr;
   grid-template-areas: "board board board history history history"
                         "board board board history history history"
                         "recommend recommend info info info info"
                         "recommend recommend info info info info"
+}
+
+@container content (max-width: 1000px) {
+  .color-container { // 颜色
+    container-name: color-container;
+    container-type: inline-size;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "board"
+                        "history"
+                        "recommend"
+                        "info"
+  }
 }
 
 .color-board { // 调色板

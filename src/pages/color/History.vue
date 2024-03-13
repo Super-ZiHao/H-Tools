@@ -11,7 +11,7 @@ const { historyColor } = storeToRefs(useHistoryColor());
 </script>
 
 <template>
-  <ColorLayoutCard title="历史保存">
+  <ColorLayoutCard  class="max-h-[446px]" title="历史保存">
     <template #subTitle>
       <ElRadioGroup v-model="currentFormat">
         <ElRadio :value="ColorTypeEnum.HEX" size="large">Hex</ElRadio>

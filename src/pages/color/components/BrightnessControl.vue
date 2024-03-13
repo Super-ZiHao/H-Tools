@@ -12,28 +12,16 @@ defineProps<{
 const { updateColor, currentColorCore } = useColorsStore()
 const squareRef = ref<HTMLDivElement>();
 
-
 const handlerChangeOffset = (e: MouseEvent) => {
   e.stopPropagation()
   e.preventDefault()
   if (!squareRef.value) return
-  const {left, top, right, bottom, width, height } = squareRef.value.getBoundingClientRect();
-  let s = currentColorCore.sv_s, v = currentColorCore.v
+  const { left, top, width, height } = squareRef.value.getBoundingClientRect();
   const { clientX, clientY } = e;
-  if (clientX >= left && clientX <= right) {
-    s = (clientX - left) / width * 100;
-  } else if (clientX > right) {
-    s = 100;
-  } else {
-    s = 0;
-  }
-  if (clientY >= top && clientY <= bottom) {
-    v = (1 - ((clientY - top) / height)) * 100;
-  } else if (clientY > bottom) {
-    v = 0;
-  } else {
-    v = 100;
-  }
+  const xRatio = (clientX - left) / width;
+  const yRatio = (clientY - top) / height;
+  const s = Math.min(100, Math.max(0, xRatio * 100));
+  const v = Math.min(100, Math.max(0, (1 - yRatio) * 100));
 
   /**
    * 特殊情况，需要在外部修改值!!!!!!!!!!!!!!!!!!

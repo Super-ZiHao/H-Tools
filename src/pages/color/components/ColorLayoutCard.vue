@@ -4,6 +4,7 @@ import { defineProps } from 'vue';
 defineProps<{
   title?: string;
   subTitle?: string;
+  bodyClass?: string;
 }>()
 </script>
 
@@ -17,7 +18,7 @@ defineProps<{
         <slot name="subTitle"></Slot>
       </div>
     </div>
-    <div class="w-full h-0 flex-1 relative bg-[#4d5358] flex gap-4 overflow-auto">
+    <div :class="`w-full h-0 flex-1 relative bg-[#4d5358] flex gap-4 overflow-auto ${bodyClass ?? ''}`">
       <slot></slot>
     </div>
   </div>

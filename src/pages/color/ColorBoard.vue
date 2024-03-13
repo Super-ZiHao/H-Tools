@@ -12,7 +12,7 @@ const PIE_SIZE = '10px';
 </script>
 
 <template>
-  <ColorLayoutCard title="颜色选择器">
+  <ColorLayoutCard class="color-board" body-class="color-board-body" title="颜色选择器">
     <div class="flex flex-col gap-1">
       <div class="relative aspect-square flex-shrink-0" style="width: 340px; height: 340px;">
         <!-- 饱和度亮度板 -->
@@ -28,5 +28,17 @@ const PIE_SIZE = '10px';
   </ColorLayoutCard>
 </template>
 
-<style lang='scss' scoped>
+<style lang='scss'>
+.color-board {
+  max-height: 446px;
+}
+@container color-container (max-width: 600px) {
+  .color-board {
+    max-height: 700px;
+  }
+  .color-board-body { // 颜色
+    flex-direction: column;
+  }
+}
+
 </style>
