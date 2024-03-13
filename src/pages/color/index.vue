@@ -41,4 +41,37 @@ import Recommend from './Recommend.vue'
 .color-recommend { // 推荐色
   grid-area: recommend;
 }
+
+
+::v-deep(.el-input) {
+  &.text-input {
+    --el-border-radius-base: 0px;
+
+    &.rounded {
+      --el-border-radius-base: 4px;
+    }
+    input {
+      text-align: center;
+    }
+  }
+
+  --el-input-focus-border-color: 'transparent';
+  --el-input-border-color: 'transparent';
+  --el-input-hover-border-color: 'transparent';
+  --el-input-bg-color: #707b80;
+  caret-color: white;
+
+  .el-input-group__prepend,
+  .el-input-group__append {
+    user-select: none;
+    padding: 0 12px;
+    flex-shrink: 0;
+    background-color: var(--el-input-bg-color);
+    color: #a9b4bc;
+  }
+
+  .el-input__inner {
+    color: white;
+  }
+}
 </style>

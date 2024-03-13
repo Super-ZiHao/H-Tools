@@ -1,18 +1,19 @@
 <!-- 输入控件 -->
 <script lang='ts' setup>
-import useColorsStore, { ColorTypeEnum } from '../hook/useColorsStore';
-import { storeToRefs } from 'pinia';
+import useColorsStore, { UpdateColorTypeEnum } from '../hook/useColorsStore';
 import { CopyDocument } from '@element-plus/icons-vue';
 import NumberInput from './NumberInput.vue';
 import useHistoryColor from '../hook/useHistoryColor';
 import tinycolor from 'tinycolor2';
+import { computed } from 'vue';
 
-const { hslString, hue, sl, sv, hex, rgb, alpha } = storeToRefs(useColorsStore());
-const { updateColor } = useColorsStore();
+const { updateColor, copyColor, currentColorCore } = useColorsStore();
 const { saveHistoryColor } = useHistoryColor();
 
+const hslString = computed(() => `hsla(${currentColorCore.hue}, ${currentColorCore.sl_s}%, ${currentColorCore.l}%, ${currentColorCore.alpha}%)`);
+
 const handlerSave = () => {
-  saveHistoryColor({ ...rgb.value, a: alpha.value / 100 })
+  saveHistoryColor({ r: currentColorCore.r, g: currentColorCore.g, b: currentColorCore.b, a: currentColorCore.alpha / 100 })
   ElNotification({
     title: '保存成功',
     message: '颜色已保存到历史记录',
@@ -26,24 +27,24 @@ const handlerSave = () => {
   <div class="pt-3 pr-5 pb-4 flex flex-col justify-between flex-1">
     <div class="rounded-md overflow-hidden">
       <div class="color-palette w-full h-28 relative overflow-hidden"></div>
-      <ElInput class="hex-input overflow-hidden" v-model="hex" maxlength="6" @input="(v) => (!!tinycolor(v).getFormat() && updateColor('hex8' , v, [ColorTypeEnum.HEX]))">
+      <ElInput class="text-input overflow-hidden" v-model="currentColorCore.hex" maxlength="6" @input="(v) => (!!tinycolor(v).getFormat() && updateColor('hex8' , v, [UpdateColorTypeEnum.HEX]))">
         <template #prepend>#</template>
         <template #append>
-          <ElIcon>
+          <ElIcon class="cursor-pointer hover:text-slate-300 transition-colors" @click="copyColor(`#${currentColorCore.hex}`)">
             <CopyDocument />
           </ElIcon>
         </template>
       </ElInput>
     </div>
     <div class="grid grid-cols-2 gap-2">
-      <NumberInput v-model="rgb.r" title="R" :max="255" @change="updateColor('rgba')" />
-      <NumberInput v-model="rgb.g" title="G" :max="255" @change="updateColor('rgba')" />
-      <NumberInput v-model="rgb.b" title="B" :max="255" @change="updateColor('rgba')" />
-      <NumberInput v-model="hue" title="H" :max="360" @change="updateColor('hsva')" />
-      <NumberInput v-model="sv.s" title="S" :max="100" @change="updateColor('hsva')" />
-      <NumberInput v-model="sv.v" title="V" :max="100" @change="updateColor('hsva')" />
-      <NumberInput v-model="sl.s" title="S" :max="100" @change="updateColor('hsla')" />
-      <NumberInput v-model="sl.l" title="L" :max="100" @change="updateColor('hsla')" />
+      <NumberInput v-model="currentColorCore.r" title="R" :max="255" @change="() => updateColor('rgba')" />
+      <NumberInput v-model="currentColorCore.g" title="G" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="currentColorCore.b" title="B" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="currentColorCore.hue" title="H" :max="360" @change="updateColor('hsva')" />
+      <NumberInput v-model="currentColorCore.sv_s" title="S" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="currentColorCore.v" title="V" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="currentColorCore.sl_s" title="S" :max="100" @change="updateColor('hsla')" />
+      <NumberInput v-model="currentColorCore.l" title="L" :max="100" @change="updateColor('hsla')" />
     </div>
     <ElButton type="primary" @click="handlerSave">
       保存颜色
@@ -71,6 +72,7 @@ $grid-2: transparent;
   }
 }
 
+
 ::v-deep(.el-input-number) {
   width: 100%;
 
@@ -82,33 +84,4 @@ $grid-2: transparent;
     border-radius: 0 4px 4px 0;
   }
 }
-
-::v-deep(.el-input) {
-  &.hex-input {
-    --el-border-radius-base: 0px;
-
-    input {
-      text-align: center;
-    }
-  }
-
-  --el-input-focus-border-color: 'transparent';
-  --el-input-border-color: 'transparent';
-  --el-input-hover-border-color: 'transparent';
-  --el-input-bg-color: #707b80;
-  caret-color: white;
-
-  .el-input-group__prepend,
-  .el-input-group__append {
-    user-select: none;
-    padding: 0;
-    width: 32px;
-    flex-shrink: 0;
-    background-color: var(--el-input-bg-color);
-    color: #a9b4bc;
-  }
-
-  .el-input__inner {
-    color: white;
-  }
-}</style>
+</style>

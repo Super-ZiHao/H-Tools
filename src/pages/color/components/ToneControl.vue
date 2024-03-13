@@ -14,8 +14,8 @@ const props = withDefaults(defineProps<{
 }>(), {
 
 });
-const { hue, colorRecommendNumber } = storeToRefs(useColorsStore());
-const { updateColor, copyColor } = useColorsStore();
+const { colorRecommendNumber } = storeToRefs(useColorsStore());
+const { updateColor, copyColor, currentColorCore } = useColorsStore();
 const pieRef = ref<HTMLDivElement>()
 
 const getRadians = (angle: number) => (angle * (Math.PI / 180));
@@ -73,7 +73,7 @@ const down = (e: MouseEvent) => {
 
 
 /** 推荐颜色逻辑 */
-const hueRecommend = computed(() => divideAngle(hue.value, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
+const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
 
 
 enum SV_TYPE_ENUM {
@@ -89,7 +89,7 @@ const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
     <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
     <div
       class="pie-drag-btn flex items-center justify-center transition-transform cursor-pointer absolute rounded-full z-10"
-      :style="{ ...getPieDargPosition(hue), '--hue': hue }">
+      :style="{ ...getPieDargPosition(currentColorCore.hue), '--hue': currentColorCore.hue }">
       <ElIcon>
         <Mouse />
       </ElIcon>

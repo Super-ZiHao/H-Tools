@@ -1,25 +1,33 @@
 <script lang='ts' setup>
 import { computed, defineProps } from 'vue';
 import tinycolor2, { ColorInputWithoutInstance } from 'tinycolor2';
-import useColorsStore from '../hook/useColorsStore';
+import useColorsStore, { ColorTypeEnum } from '../hook/useColorsStore';
 import { CopyDocument } from '@element-plus/icons-vue';
+import { storeToRefs } from 'pinia';
 const props = defineProps<{
   color?: ColorInputWithoutInstance
 }>()
 
+const { currentFormat } = storeToRefs(useColorsStore())
 const { updateColor, copyColor } = useColorsStore();
-const backgroundColor = computed(() => {
+
+const stringBgColor = computed(() => {
   const color = tinycolor2(props.color);
   const alpha = color.getAlpha();
-  if (alpha === 1) {
-    return color.toHexString();
+  switch (currentFormat.value) {
+    case ColorTypeEnum.HEX: return alpha === 1 ? color.toHexString() : color.toHex8String();
+    case ColorTypeEnum.RGB: return color.toRgbString()
+    case ColorTypeEnum.HSL: return color.toHslString()
+    case ColorTypeEnum.HSV: return color.toHsvString()
+    default: return color.toHexString()
   }
-  return color.toHex8String();
-});
+})
+
+const previewBgColor = computed(() => tinycolor2(props.color).toRgbString());
 
 const handlerCopy = (e: MouseEvent) => {
   e.stopPropagation();
-  copyColor(tinycolor2(props.color).toRgbString())
+  copyColor(stringBgColor.value)
 }
 
 
@@ -27,11 +35,17 @@ const handlerCopy = (e: MouseEvent) => {
 
 <template>
   <div class="color-card cursor-pointer transition-transform" @click="updateColor('auto', color)" v-bind="$attrs" v-if="!!color">
-    <div class="hex-string absolute inset-0 z-10 flex items-center justify-center text-white mix-blend-difference">{{ backgroundColor }}</div>
-
-    <div class="color-card-copy absolute top-0 right-0 z-20 px-3 rounded-bl-md transition-all text-white py-1" @click="handlerCopy">
-      <ElIcon><CopyDocument /></ElIcon>
-    </div>
+    <!-- 中间文字 -->
+    <div class="hex-string absolute w-full h-full left-0 top-0 p-2 z-10 flex items-center justify-center text-white mix-blend-difference" style="font-size:  12px;">{{ stringBgColor }}</div>
+    <!-- 复制按钮 -->
+    <ElTooltip
+      placement="top"
+      :content="stringBgColor"
+    >
+      <div class="color-card-copy absolute top-0 right-0 z-20 px-3 rounded-bl-md transition-all text-white py-[2px]" @click="handlerCopy">
+        <ElIcon><CopyDocument /></ElIcon>
+      </div>
+    </ElTooltip>
   </div>
   <div class="bg-white" v-else></div>
 </template>
@@ -54,7 +68,7 @@ $grid-2: transparent;
     content: '';
     position: absolute;
     inset: 0;
-    background-color: v-bind(backgroundColor);
+    background-color: v-bind(previewBgColor);
   }
 
   .hex-string {

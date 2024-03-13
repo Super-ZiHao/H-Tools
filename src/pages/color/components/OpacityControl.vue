@@ -1,15 +1,14 @@
 <!-- 透明度 - 控件 -->
 <script lang='ts' setup>
-import { storeToRefs } from 'pinia';
 import useColorsStore from '../hook/useColorsStore';
 
-const { alpha, hue } = storeToRefs(useColorsStore());
+const { currentColorCore } = useColorsStore();
 
 </script>
 
 <template>
   <div class="flex items-center px-14">
-    <ElSlider v-model="alpha" height="200px" :style="`--background-color: hsl(${hue}, 100%, 50%)`" />
+    <ElSlider v-model="currentColorCore.alpha" height="200px" :style="`--background-color: hsl(${currentColorCore.hue}, 100%, 50%)`" />
   </div>
 </template>
 

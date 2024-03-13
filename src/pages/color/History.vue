@@ -3,13 +3,23 @@ import ColorLayoutCard from './components/ColorLayoutCard.vue';
 import ColorCard from './components/ColorCard.vue';
 import useHistoryColor from './hook/useHistoryColor';
 import { storeToRefs } from 'pinia';
+import useColorsStore, { ColorTypeEnum } from './hook/useColorsStore';
 
+const { currentFormat } = storeToRefs(useColorsStore())
 const { historyColor } = storeToRefs(useHistoryColor());
 
 </script>
 
 <template>
-  <ColorLayoutCard title="历史保存" sub-title="最多保存 20 种颜色">
+  <ColorLayoutCard title="历史保存">
+    <template #subTitle>
+      <ElRadioGroup v-model="currentFormat">
+        <ElRadio :value="ColorTypeEnum.HEX" size="large">Hex</ElRadio>
+        <ElRadio :value="ColorTypeEnum.RGB" size="large">RGB</ElRadio>
+        <ElRadio :value="ColorTypeEnum.HSV" size="large">Hsv</ElRadio>
+        <ElRadio :value="ColorTypeEnum.HSL" size="large">Hsl</ElRadio>
+      </ElRadioGroup>
+    </template>
     <div class="grid-container grid w-full h-fit p-4 gap-4">
       <ColorCard class="w-full h-full aspect-square rounded-md" v-for="item in historyColor" :color="item" :key="String(item)" />
     </div>

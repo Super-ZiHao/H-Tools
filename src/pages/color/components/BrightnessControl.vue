@@ -1,23 +1,21 @@
 <!-- 饱和度亮度板 - 控件 -->
 <script lang='ts' setup>
 import { ref, defineProps } from 'vue';
-import useColorsStore, { ColorTypeEnum } from '../hook/useColorsStore';
-import { storeToRefs } from 'pinia';
+import useColorsStore, { UpdateColorTypeEnum } from '../hook/useColorsStore';
 
 defineProps<{
   sizeString: string;
   pieSizeString: string;
 }>()
 
-const { sv, hue } = storeToRefs(useColorsStore());
-const { updateColor } = useColorsStore()
+const { updateColor, currentColorCore } = useColorsStore()
 const squareRef = ref<HTMLDivElement>();
 const handlerChangeOffset = (e: MouseEvent) => {
   e.stopPropagation()
   e.preventDefault()
   if (!squareRef.value) return
   const {left, top, right, bottom, width, height } = squareRef.value.getBoundingClientRect();
-  let s = sv.value.s, v = sv.value.v
+  let s = currentColorCore.sv_s, v = currentColorCore.v
   const { clientX, clientY } = e;
   if (clientX >= left && clientX <= right) {
     s = (clientX - left) / width * 100;
@@ -38,9 +36,9 @@ const handlerChangeOffset = (e: MouseEvent) => {
    * 特殊情况，需要在外部修改值!!!!!!!!!!!!!!!!!!
    * 鉴于 vue 双向绑定，尽量不要在外面直接修改 store 中的值，会为以后留下坑
   */
-  sv.value.s = s;
-  sv.value.v = v;
-  updateColor('hsva', {}, [ColorTypeEnum.HSV])
+  currentColorCore.sv_s = s;
+  currentColorCore.v = v;
+  updateColor('hsva', {}, [UpdateColorTypeEnum.HSV])
 }
 
 const handlerSquareDown = (e: MouseEvent) => {
@@ -58,13 +56,13 @@ const handlerSquareDown = (e: MouseEvent) => {
 <template>
   <div
     class="square-chart cursor-pointer absolute z-10 rounded-xl overflow-hidden"
-    :style="`background-color: hsl(${hue}, 100%, 50%);`"
+    :style="`background-color: hsl(${currentColorCore.hue}, 100%, 50%);`"
     @mousedown="handlerSquareDown"
     ref="squareRef"
   >
     <div
       class="square-drag-btn pointer-events-none absolute translate-x-[-8px] translate-y-[-8px] w-4 h-4 rounded-full z-10"
-      :style="{ left: `${sv.s}%`, top: `${(100 - sv.v)}%` }"
+      :style="{ left: `${currentColorCore.sv_s}%`, top: `${(100 - currentColorCore.v)}%` }"
     ></div>
   </div>
 </template>
