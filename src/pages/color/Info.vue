@@ -19,17 +19,17 @@ const colorTypeArr: ColorTypeEnum[] = [
   ColorTypeEnum.HSVA,
 ]
 const getStringBgColor = (type: ColorTypeEnum) => {
-  const color = tinycolor({ h: formatCurrentColorCore.value.hue, s: formatCurrentColorCore.value.sv_s /100, v: formatCurrentColorCore.value.v / 100, a: formatCurrentColorCore.value.alpha / 100});
-  const notAlphaColor = tinycolor({ h: formatCurrentColorCore.value.hue, s: formatCurrentColorCore.value.sv_s /100, v: formatCurrentColorCore.value.v / 100 });
+  const { r, g, b, alpha, hex, hue, sl_s, sv_s, l, v } = formatCurrentColorCore.value;
+  const a = alpha / 100;
   switch (type) {
-    case ColorTypeEnum.HEX: return notAlphaColor.toHexString()
-    case ColorTypeEnum.RGB: return notAlphaColor.toRgbString()
-    case ColorTypeEnum.HSL: return notAlphaColor.toHslString()
-    case ColorTypeEnum.HSV: return notAlphaColor.toHsvString()
-    case ColorTypeEnum.HEX8: return color.toHex8String()
-    case ColorTypeEnum.RGBA: return `rgba(${formatCurrentColorCore.value.r}, ${formatCurrentColorCore.value.g}, ${formatCurrentColorCore.value.b}, ${formatCurrentColorCore.value.alpha / 100})`
-    case ColorTypeEnum.HSLA: return `hsla(${formatCurrentColorCore.value.hue}, ${formatCurrentColorCore.value.sl_s}%, ${formatCurrentColorCore.value.l}%, ${formatCurrentColorCore.value.alpha / 100})`
-    case ColorTypeEnum.HSVA: return `hsva(${formatCurrentColorCore.value.hue}, ${formatCurrentColorCore.value.sv_s}%, ${formatCurrentColorCore.value.v}%, ${formatCurrentColorCore.value.alpha / 100})`
+    case ColorTypeEnum.HEX: return `#${hex}`
+    case ColorTypeEnum.RGB: return `rgb(${r}, ${g}, ${b})`
+    case ColorTypeEnum.HSL: return `hsl(${hue}, ${sl_s}%, ${l}%)`
+    case ColorTypeEnum.HSV: return `hsv(${hue}, ${sv_s}%, ${v}%)`
+    case ColorTypeEnum.HEX8: return tinycolor({ r, g, b, a }).toHex8String()
+    case ColorTypeEnum.RGBA: return `rgba(${r}, ${g}, ${b}, ${a})`
+    case ColorTypeEnum.HSLA: return `hsla(${hue}, ${sl_s}%, ${l}%, ${a})`
+    case ColorTypeEnum.HSVA: return `hsva(${hue}, ${sv_s}%, ${v}%, ${a})`
   }
 }
 
@@ -37,7 +37,7 @@ const getStringBgColor = (type: ColorTypeEnum) => {
 </script>
 
 <template>
-  <ColorLayoutCard class="min-h-[240px]" title="格式坞">
+  <ColorLayoutCard class="min-h-[240px] max-h-[500px]" title="格式坞">
     <div class="pt-3 flex flex-col gap-4 px-4 w-full">
       <!-- <ElInput class="switch-input" :prefixIcon="Switch" /> -->
       <div class="grid grid-cols-2 gap-2">

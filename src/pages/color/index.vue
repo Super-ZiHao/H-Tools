@@ -6,7 +6,7 @@ import Recommend from './Recommend.vue'
 </script>
 
 <template>
-	<div class="color-container grid gap-4 w-full h-full flex-1 max-w-[1280px] rounded-2xl m-auto">
+	<div class="color-container grid gap-4 w-full h-full flex-1 max-w-[1440px] rounded-2xl m-auto">
     <ColorBoard class="color-board shadow-md" />
     <Info class="color-info shadow-md" />
     <History class="color-history shadow-md" />
@@ -40,7 +40,6 @@ import Recommend from './Recommend.vue'
 
 .color-board { // 调色板
   grid-area: board;
-  aspect-ratio: 1;
 }
 .color-preview { // 颜色预览
   grid-area: preview;

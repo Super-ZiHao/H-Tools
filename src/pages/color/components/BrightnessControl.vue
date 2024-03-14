@@ -51,7 +51,7 @@ const translate = computed(() => {
 
 <template>
   <div
-    class="square-chart cursor-pointer absolute z-10 rounded-xl overflow-hidden"
+    class="square-chart aspect-square cursor-pointer absolute z-10 rounded-xl overflow-hidden"
     :style="`background-color: hsl(${currentColorCore.hue}, 100%, 50%);`"
     @mousedown="handlerSquareDown"
     ref="squareRef"

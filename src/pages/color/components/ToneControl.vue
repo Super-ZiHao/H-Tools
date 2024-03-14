@@ -72,13 +72,6 @@ const down = (e: MouseEvent) => {
 /** 推荐颜色逻辑 */
 const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
 
-
-enum SV_TYPE_ENUM {
-  L = 'hsl',
-  V = 'hsv',
-}
-const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
-
 </script>
 
 <template>
@@ -102,15 +95,6 @@ const SVType = ref<SV_TYPE_ENUM>(SV_TYPE_ENUM.V);
         </ElIcon>
       </div>
     </ElTooltip>
-
-    <div
-      :class="`btn-l ${SVType === SV_TYPE_ENUM.V ? 'active' : ''} select-none transition-all absolute left-0 top-0 text-white w-11 h-11 flex items-center justify-center rounded-full cursor-pointer`"
-      @mousedown="(e) => e.stopPropagation()"
-    >V</div>
-    <div
-      :class="`btn-l ${SVType === SV_TYPE_ENUM.L ? 'active' : ''} select-none transition-all absolute right-0 top-0 text-white w-11 h-11 flex items-center justify-center rounded-full cursor-pointer`"
-      @mousedown="(e) => e.stopPropagation()"
-    >L</div>
   </div>
 </template>
 
@@ -121,11 +105,8 @@ $pieSize: v-bind(pieSizeString);
 
 /* 圆盘 */
 .pie-chart {
-  --red: #ff0000;
-  --blue: #0000ff;
-  --yellow: #ffff00;
-  --green: #00ff00;
   position: absolute;
+  aspect-ratio: 1;
   inset: $pieSize;
   border-radius: 50%;
   background: conic-gradient(hsl(270, 100%, 50%),
@@ -170,20 +151,6 @@ $pieSize: v-bind(pieSizeString);
         opacity: 0;
         transition: opacity .2s;
       }
-    }
-  }
-
-
-  .btn-l {
-    background: linear-gradient(145deg, #53595d, #464b4e);
-    box-shadow: 5px 5px 5px #1f2123,
-      -5px -5px 5px #7d858b;
-
-    &:active,
-    &.active {
-      background: #4e5357;
-      box-shadow: inset 9px 9px 18px #1f2123,
-        inset -9px -9px 18px #7d858b;
     }
   }
 }

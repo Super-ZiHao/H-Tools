@@ -12,11 +12,14 @@ const { colorRecommendNumber } = storeToRefs(useColorsStore())
 const { currentColorCore } = useColorsStore();
 const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecommendNumber.value))
 
-const getColor = (h: number) => ({ h, s: currentColorCore.sv_s, v: currentColorCore.v, a: currentColorCore.alpha / 100 })
+const getColor = (h: number) => {
+  const { sv_s, v, alpha } = currentColorCore;
+  return ({ h, s: sv_s / 100, v: v / 100, a: alpha / 100 })
+}
 </script>
 
 <template>
-  <ColorLayoutCard class="min-h-[300px]">
+  <ColorLayoutCard class="min-h-[300px] max-h-[500px]" body-class="h-0">
     <ElTabs type="border-card" v-model="colorRecommendNumber">
       <ElTabPane class="flex gap-3" label="互补色" :name="ColorRecommendTypeEnum.Complementary">
         <ColorCard class="w-full h-full rounded-xl hover:scale-[1.02]" v-for="h in hueRecommend" :color="getColor(h)" :key="h" />
@@ -41,6 +44,7 @@ const getColor = (h: number) => ({ h, s: currentColorCore.sv_s, v: currentColorC
 $header-height: 56px;
 ::v-deep(.el-tabs) {
   width: 100%;
+  height: 100%;
   border-radius: .75rem;
   border: none;
   background-color: #4e5357;

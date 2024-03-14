@@ -77,18 +77,21 @@ const useColorsStore = defineStore('color', () => {
 
 
 
-  const formatCurrentColorCore = computed(() => ({
-    hex: currentColorCore.hex,
-    r: intNumber(currentColorCore.r),
-    g: intNumber(currentColorCore.g),
-    b: intNumber(currentColorCore.b),
-    hue: intNumber(currentColorCore.hue),
-    sv_s: intNumber(currentColorCore.sv_s),
-    v: intNumber(currentColorCore.v),
-    sl_s: intNumber(currentColorCore.sl_s),
-    l: intNumber(currentColorCore.l),
-    alpha: intNumber(currentColorCore.alpha),
-  }))
+  const formatCurrentColorCore = computed(() => {
+    const { hex, r, g, b, hue, sv_s, v, sl_s, l, alpha } = currentColorCore;
+    return ({
+      hex: hex,
+      r: intNumber(r),
+      g: intNumber(g),
+      b: intNumber(b),
+      hue: intNumber(hue),
+      sv_s: intNumber(sv_s),
+      v: intNumber(v),
+      sl_s: intNumber(sl_s),
+      l: intNumber(l),
+      alpha: intNumber(alpha),
+    })
+  })
 
   /** 推荐类型 */
   const colorRecommendNumber = ref<ColorRecommendTypeEnum>(ColorRecommendTypeEnum.NULL)

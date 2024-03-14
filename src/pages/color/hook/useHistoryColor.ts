@@ -4,7 +4,7 @@ import { ColorFormats } from "tinycolor2";
 import { uniqWith } from 'lodash-es';
 
 const HISTORY_COLOR_KEY = 'history-color';
-export const MAX_LENGTH = 50;
+export const MAX_LENGTH = 24;
 /** 历史保存颜色 */
 const useHistoryColor = defineStore(HISTORY_COLOR_KEY, () => {
   // 获取

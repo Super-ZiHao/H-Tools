@@ -18,7 +18,7 @@ defineProps<{
         <slot name="subTitle"></Slot>
       </div>
     </div>
-    <div :class="`w-full h-0 flex-1 relative bg-[#4d5358] flex gap-4 overflow-auto ${bodyClass ?? ''}`">
+    <div :class="`w-full flex-1 relative bg-[#4d5358] overflow-auto ${bodyClass ?? ''}`">
       <slot></slot>
     </div>
   </div>

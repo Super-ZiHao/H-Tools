@@ -1,9 +1,10 @@
 <script lang='ts' setup>
 import ColorLayoutCard from './components/ColorLayoutCard.vue';
 import ColorCard from './components/ColorCard.vue';
-import useHistoryColor from './hook/useHistoryColor';
+import useHistoryColor, { MAX_LENGTH } from './hook/useHistoryColor';
 import { storeToRefs } from 'pinia';
 import useColorsStore, { ColorTypeEnum } from './hook/useColorsStore';
+import { Plus } from '@element-plus/icons-vue';
 
 const { currentFormat } = storeToRefs(useColorsStore())
 const { historyColor } = storeToRefs(useHistoryColor());
@@ -22,6 +23,13 @@ const { historyColor } = storeToRefs(useHistoryColor());
     </template>
     <div class="grid-container grid w-full h-fit p-4 gap-4">
       <ColorCard class="w-full h-full aspect-square rounded-md" v-for="item in historyColor" :color="item" :key="String(item)" />
+      <div
+        class="w-full h-full aspect-square rounded-md flex items-center justify-center text-white bg-[#989898]"
+        v-for="(_item, idx) in MAX_LENGTH - historyColor.length"
+        :key="idx"
+      >
+        <ElIcon size="24px"><Plus/></ElIcon>
+      </div>
     </div>
   </ColorLayoutCard>
 </template>

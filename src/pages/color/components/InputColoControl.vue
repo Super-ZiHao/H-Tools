@@ -6,8 +6,10 @@ import NumberInput from './NumberInput.vue';
 import useHistoryColor from '../hook/useHistoryColor';
 import tinycolor from 'tinycolor2';
 import { computed } from 'vue';
+import { toRefs } from 'vue';
 
 const { updateColor, copyColor, currentColorCore } = useColorsStore();
+const { hex, hue, r, g, b, sv_s, sl_s, l, v } = toRefs(currentColorCore)
 const { saveHistoryColor } = useHistoryColor();
 
 const hslString = computed(() => `rgba(${currentColorCore.r}, ${currentColorCore.g}, ${currentColorCore.b}, ${currentColorCore.alpha}%)`);
@@ -24,27 +26,27 @@ const handlerSave = () => {
 </script>
 
 <template>
-  <div class="pt-3 pr-5 pb-4 flex flex-col justify-between flex-1">
+  <div class="p-4 flex flex-col gap-4 justify-between flex-1">
     <div class="rounded-md overflow-hidden">
       <div class="color-palette w-full h-28 relative overflow-hidden"></div>
-      <ElInput class="text-input overflow-hidden" v-model="currentColorCore.hex" maxlength="6" @input="(v) => (!!tinycolor(v).getFormat() && updateColor('hex8' , v, [UpdateColorTypeEnum.HEX]))">
+      <ElInput class="text-input overflow-hidden" v-model="hex" maxlength="6" @input="(v) => (!!tinycolor(v).getFormat() && updateColor('hex8' , v, [UpdateColorTypeEnum.HEX]))">
         <template #prepend>#</template>
         <template #append>
-          <ElIcon class="cursor-pointer hover:text-slate-300 transition-colors" @click="copyColor(`#${currentColorCore.hex}`)">
+          <ElIcon class="cursor-pointer hover:text-slate-300 transition-colors" @click="copyColor(`#${hex}`)">
             <CopyDocument />
           </ElIcon>
         </template>
       </ElInput>
     </div>
     <div class="grid grid-cols-2 gap-2">
-      <NumberInput v-model="currentColorCore.r" title="R" :max="255" @change="() => updateColor('rgba')" />
-      <NumberInput v-model="currentColorCore.g" title="G" :max="255" @change="updateColor('rgba')" />
-      <NumberInput v-model="currentColorCore.b" title="B" :max="255" @change="updateColor('rgba')" />
-      <NumberInput v-model="currentColorCore.hue" title="H" :max="360" @change="updateColor('hsva')" />
-      <NumberInput v-model="currentColorCore.sv_s" title="S" :max="100" @change="updateColor('hsva')" />
-      <NumberInput v-model="currentColorCore.v" title="V" :max="100" @change="updateColor('hsva')" />
-      <NumberInput v-model="currentColorCore.sl_s" title="S" :max="100" @change="updateColor('hsla')" />
-      <NumberInput v-model="currentColorCore.l" title="L" :max="100" @change="updateColor('hsla')" />
+      <NumberInput v-model="r" title="R" :max="255" @change="() => updateColor('rgba')" />
+      <NumberInput v-model="g" title="G" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="b" title="B" :max="255" @change="updateColor('rgba')" />
+      <NumberInput v-model="hue" title="H" :max="360" @change="updateColor('hsva')" />
+      <NumberInput v-model="sv_s" title="S" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="v" title="V" :max="100" @change="updateColor('hsva')" />
+      <NumberInput v-model="sl_s" title="S" :max="100" @change="updateColor('hsla')" />
+      <NumberInput v-model="l" title="L" :max="100" @change="updateColor('hsla')" />
     </div>
     <ElButton type="primary" @click="handlerSave">
       保存颜色

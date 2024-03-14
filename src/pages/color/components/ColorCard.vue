@@ -34,7 +34,7 @@ const handlerCopy = (e: MouseEvent) => {
 </script>
 
 <template>
-  <div class="color-card cursor-pointer transition-transform" @click="updateColor('auto', color)" v-bind="$attrs" v-if="!!color">
+  <div class="color-card cursor-pointer transition-transform" @click="updateColor('auto', color)" v-bind="$attrs">
     <!-- 中间文字 -->
     <div class="hex-string absolute w-full h-full left-0 top-0 p-2 z-10 flex items-center justify-center text-white mix-blend-difference" style="font-size:  12px;">{{ stringBgColor }}</div>
     <!-- 复制按钮 -->
@@ -47,7 +47,6 @@ const handlerCopy = (e: MouseEvent) => {
       </div>
     </ElTooltip>
   </div>
-  <div class="bg-white" v-else></div>
 </template>
 
 <style lang='scss' scoped>
