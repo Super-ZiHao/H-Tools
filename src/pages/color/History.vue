@@ -14,7 +14,7 @@ const { historyColor } = storeToRefs(useHistoryColor());
 <template>
   <ColorLayoutCard  class="max-h-[446px]" title="历史保存">
     <template #subTitle>
-      <ElRadioGroup v-model="currentFormat">
+      <ElRadioGroup class="color-radio-group" v-model="currentFormat">
         <ElRadio :value="ColorTypeEnum.HEX" size="large">Hex</ElRadio>
         <ElRadio :value="ColorTypeEnum.RGB" size="large">RGB</ElRadio>
         <ElRadio :value="ColorTypeEnum.HSV" size="large">Hsv</ElRadio>
@@ -37,5 +37,28 @@ const { historyColor } = storeToRefs(useHistoryColor());
 <style lang='scss' scoped>
 .grid-container {
   grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
+
+@container color-container (max-width: 600px) {
+  ::v-deep(.color-radio-group) {
+    .el-radio {
+      margin-right: 12px;
+
+      .el-radio__label {
+        padding-left: 4px;
+      }
+    }
+  }
+}
+
+@container color-container (max-width: 400px) {
+  ::v-deep(.color-radio-group) {
+    .el-radio {
+      margin-right: 6px;
+      .el-radio__label {
+        padding-left: 2px;
+      }
+    }
+  }
 }
 </style>

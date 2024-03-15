@@ -3,7 +3,7 @@
 import { defineProps, withDefaults, ref, computed } from 'vue';
 import useColorsStore from '../hook/useColorsStore';
 import { storeToRefs } from 'pinia';
-import { divideAngle, getAngle } from '../utils'
+import { divideAngle, getAngle, getEventType } from '../utils'
 import { CopyDocument, Mouse } from '@element-plus/icons-vue';
 
 const startAngle = 0; // 开始的角度
@@ -35,12 +35,11 @@ const pieDargPosition = (currentAngle: number) => {
   return `translate(${x}px, ${y}px)`
 }
 
-
-const change = (e: MouseEvent) => {
-  e.stopPropagation()
-  e.preventDefault()
+const handleEvent = (e: MouseEvent | TouchEvent) => {
+  e.stopPropagation();
+  e.preventDefault();
   if (!pieRef.value) return;
-  const { clientX, clientY } = e
+  const { clientX, clientY } = getEventType(e)
   const { left, top, width } = pieRef.value.getBoundingClientRect();
   const centerX = left + (width / 2); // 圆心 X 坐标
   const centerY = top + (width / 2); // 圆心 Y 坐标
@@ -53,21 +52,18 @@ const change = (e: MouseEvent) => {
   const adjustedAngle = angle - startAngle;
   const currentAngle = (adjustedAngle + 360) % 360;
 
-  updateColor('hsva', { h: currentAngle })
-}
+  updateColor('hsva', { h: currentAngle });
+};
 
-const up = () => {
-  if (!pieRef.value) return;
-  document.body.removeEventListener('mousemove', change)
-  document.body.removeEventListener('mouseup', up)
-}
-const down = (e: MouseEvent) => {
-  if (!pieRef.value) return;
-  change(e);
-  document.body.addEventListener('mousemove', change)
-  document.body.addEventListener('mouseup', up)
-}
-
+const handleDown = (e: MouseEvent) => {
+  handleEvent(e);
+  const handleUp = () => {
+    window.removeEventListener('mousemove', handleEvent);
+    window.removeEventListener('mouseup', handleUp);
+  };
+  window.addEventListener('mousemove', handleEvent);
+  window.addEventListener('mouseup', handleUp);
+};
 
 /** 推荐颜色逻辑 */
 const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecommendNumber.value).slice(1, colorRecommendNumber.value))
@@ -75,7 +71,13 @@ const hueRecommend = computed(() => divideAngle(currentColorCore.hue, colorRecom
 </script>
 
 <template>
-  <div class="pie-chart" @mousedown="down" ref="pieRef">
+  <div
+    class="pie-chart"
+    @mousedown="handleDown"
+    @touchstart="handleEvent"
+    @touchmove="handleEvent"
+    ref="pieRef"
+  >
     <div class="pie-chart-mask cursor-default" @mousedown="(e) => e.stopPropagation()"></div>
     <div
       class="pie-drag-btn flex items-center justify-center cursor-pointer absolute rounded-full z-10"

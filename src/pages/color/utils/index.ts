@@ -7,3 +7,10 @@ export const divideAngle = (angle: number, count = 3) => {
 }
 
 export const getAngle = (angle: number) => angle >= 0 ? angle % 360 : -angle % 360;
+
+// 兼容移动端
+export const getEventType = (e: MouseEvent | TouchEvent) => {
+  const type = e.type;
+  if (type === 'touchmove' || type === 'touchstart' || type === 'touchend') return (e as TouchEvent).touches[0];
+  return e as MouseEvent;
+}

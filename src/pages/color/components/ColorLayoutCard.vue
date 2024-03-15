@@ -10,10 +10,10 @@ defineProps<{
 
 <template>
   <div class="flex flex-col w-full h-full rounded-xl overflow-hidden">
-    <div class="w-full h-14 bg-[#222222] flex items-center justify-between flex-shrink-0" v-if="!!title">
-      <div class="pl-8 text-white text-xl">{{ title }}</div>
+    <div class="card-title w-full bg-[#222222] flex items-center justify-between flex-shrink-0" v-if="!!title">
+      <div class="text-white etext-white">{{ title }}</div>
 
-      <div class="pr-8 text-sm text-gray-400">
+      <div class="text-sm text-gray-400">
         {{ subTitle }}
         <slot name="subTitle"></Slot>
       </div>
@@ -23,3 +23,25 @@ defineProps<{
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.card-title {
+  padding-inline: 24px;
+  height: 56px;
+  font-size: 20px;
+}
+@container color-container (max-width: 600px) {
+  .card-title {
+    padding-inline: 16px;
+    font-size: 18px;
+    height: 48px;
+  }
+}
+
+@container color-container (max-width: 400px) {
+  .card-title {
+    padding-inline: 8px;
+    height: 40px;
+  }
+}
+</style>

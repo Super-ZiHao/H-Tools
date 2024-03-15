@@ -3,6 +3,7 @@
 import { ref, defineProps } from 'vue';
 import useColorsStore, { UpdateColorTypeEnum } from '../hook/useColorsStore';
 import { computed } from 'vue';
+import { getEventType } from '../utils';
 
 defineProps<{
   sizeString: string;
@@ -12,12 +13,12 @@ defineProps<{
 const { updateColor, currentColorCore } = useColorsStore()
 const squareRef = ref<HTMLDivElement>();
 
-const handlerChangeOffset = (e: MouseEvent) => {
+const handlerChangeOffset = (e: MouseEvent | TouchEvent) => {
   e.stopPropagation()
   e.preventDefault()
   if (!squareRef.value) return
   const { left, top, width, height } = squareRef.value.getBoundingClientRect();
-  const { clientX, clientY } = e;
+  const { clientX, clientY } = getEventType(e);
   const xRatio = (clientX - left) / width;
   const yRatio = (clientY - top) / height;
   const s = Math.min(100, Math.max(0, xRatio * 100));
@@ -54,6 +55,8 @@ const translate = computed(() => {
     class="square-chart aspect-square cursor-pointer absolute z-10 rounded-xl overflow-hidden"
     :style="`background-color: hsl(${currentColorCore.hue}, 100%, 50%);`"
     @mousedown="handlerSquareDown"
+    @touchstart="handlerChangeOffset"
+    @touchmove="handlerChangeOffset"
     ref="squareRef"
   >
     <div
