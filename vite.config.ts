@@ -6,6 +6,9 @@ import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import viteEslint from 'vite-plugin-eslint';
+import viteStylelint from 'vite-plugin-stylelint';
+import { optimizeCssModules } from 'vite-plugin-optimize-css-modules';
 
 const INVALID_CHAR_REGEX = /[\u0000-\u001F"#$&*+,:;<=>?[\]^`{|}\u007F]/g
 const DRIVE_LETTER_REGEX = /^[a-z]:/i
@@ -13,6 +16,9 @@ const DRIVE_LETTER_REGEX = /^[a-z]:/i
 export default defineConfig({
   plugins: [
     vue(),
+    optimizeCssModules(),
+    viteEslint(),
+    viteStylelint,
     (monacoEditorPlugin as any).default({
       languageWorkers: ['css', 'json'],
     }),
